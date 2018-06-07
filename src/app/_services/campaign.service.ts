@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Entity } from '../_models/entity'
-import { CampaignService }  from '../_services/campaign.service'
+import { Campaign, CampaignId } from '../_models/campaign'
+
 import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
