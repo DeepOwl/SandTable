@@ -1,0 +1,10 @@
+<mat-card>
+<mat-card-header>
+  <mat-card-title>{{entity.name}}</mat-card-title>
+  <mat-card-subtitle>{{entity.description}}</mat-card-subtitle>
+</mat-card-header>
+<mat-card-content>
+
+  <app-relationship *ngFor="let rel of entity.relationships" [relationship]='rel'></app-relationship>
+</mat-card-content>
+</mat-card>

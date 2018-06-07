@@ -1,0 +1,13 @@
+
+  <mat-card *ngFor="let campaign of campaigns | async">
+    <mat-card-header>
+      <mat-card-title>{{campaign.name}}</mat-card-title>
+      <mat-card-subtitle>{{campaign.description}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <pre>{{campaign | json}}</pre>
+    </mat-card-content>
+    <mat-card-actions>
+      <button routerLink='/campaign/{{campaign.id}}/none'mat-button>EMBARK</button>
+    </mat-card-actions>
+  </mat-card>

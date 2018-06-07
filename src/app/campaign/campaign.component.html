@@ -1,0 +1,23 @@
+
+<form>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="Sample McSample">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Subtitle</mat-label>
+    <input matInput placeholder="King of Sampledom">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput placeholder="Description"></textarea>
+  </mat-form-field>
+</form>
+
+
+<app-entity *ngIf='entity' [entity]='entity'></app-entity>
+
+<div *ngFor="let e of entities | async">
+  <app-entity-mini routerLink='../{{e.id}}'[entity]='e'></app-entity-mini>
+
+</div>
