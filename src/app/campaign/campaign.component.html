@@ -1,21 +1,23 @@
 
-<form>
+<mat-card class="example-card">
+  <form class="example-container" [formGroup]="entityForm" (ngSubmit)="onFormSubmit()">
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput placeholder="Sample McSample">
+    <input formControlName="name" matInput placeholder="Sample McSample" autocomplete='off'>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Subtitle</mat-label>
-    <input matInput placeholder="King of Sampledom">
+    <input formControlName="subtitle" matInput placeholder="King of Sampledom" autocomplete='off'>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Description</mat-label>
-    <textarea matInput placeholder="Description"></textarea>
+    <textarea formControlName="description" matInput placeholder="Description" autocomplete='off'></textarea>
   </mat-form-field>
+  <button [disabled]="entityForm.status !== 'VALID'"  mat-raised-button color="accent" >Submit</button>
 </form>
+</mat-card>
 
-
-<app-entity *ngIf='entity' [entity]='entity'></app-entity>
+<app-entity class="example-card example-container" *ngIf='entity' [entity]='entity'></app-entity>
 
 <div *ngFor="let e of entities | async">
   <app-entity-mini routerLink='../{{e.id}}'[entity]='e'></app-entity-mini>

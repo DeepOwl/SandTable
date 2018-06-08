@@ -7,4 +7,7 @@
 
   <app-relationship *ngFor="let rel of entity.relationships" [relationship]='rel'></app-relationship>
 </mat-card-content>
+<mat-card-actions>
+  <button (click)="deleteEntity()" mat-raised-button color='warning'>DELETE</button>
+</mat-card-actions>
 </mat-card>

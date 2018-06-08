@@ -11,7 +11,8 @@ import { map } from 'rxjs/operators';
 export class CampaignService {
   private campaignCollection: AngularFirestoreCollection<Campaign>;
   constructor(private afs: AngularFirestore) { }
-
+  entityId:string;
+  campaignId:string;
   getEntities(campaignId:string):Observable<any>{
      //return this.afs.collection('campaigns').doc(campaignId).collection('entities').valueChanges();
      //var entityCollection = afs.collection<Campaign>('campaigns');
@@ -27,7 +28,17 @@ export class CampaignService {
   }
 
   getEntity(campaignId:string, entityId:string):Observable<Entity>{
-     return this.afs.collection('campaigns').doc(campaignId).collection('entities').doc<Entity>(entityId).valueChanges();
+     return this.afs.collection('campaigns').doc(campaignId).collection('entities').doc<Entity>(entityId).snapshotChanges().pipe(
+       map(a => {
+         console.log(a);
+         if(a.payload.exists){
+           const data = a.payload.data() as Entity;
+           const id = a.payload.id;
+           return {id, ...data }
+         }
+       })
+
+     );
   }
 
   getCampaignList(){
@@ -40,6 +51,20 @@ export class CampaignService {
       }))
 
     );
+  }
+
+  setCampaignId(id:string){
+    this.campaignId = id;
+  }
+  setEntityId(id:string){
+    this.entityId = id;
+  }
+
+  addEntity(campaignId:string, entity: Entity){
+    return this.afs.collection('campaigns').doc(campaignId).collection('entities').add(entity);
+  }
+  deleteEntity(entityId:string){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).delete();
   }
 
 
