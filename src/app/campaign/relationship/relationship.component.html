@@ -1,3 +1,5 @@
-<a routerLink='../{{relationship.src}}'>{{relationship.src}}</a>
+<a *ngIf="srcEntity" routerLink='../{{relationship.src}}'>{{srcEntity.name}}</a>
+<a *ngIf="!srcEntity" routerLink='../{{relationship.src}}'>{{relationship.src}}</a>
 {{relationship.relationship}}
-<a routerLink='../{{relationship.dest}}'>{{relationship.dest}}</a>
+<a *ngIf="destEntity" routerLink='../{{relationship.dest}}'>{{destEntity.name}}</a>
+<a *ngIf="!destEntity" routerLink='../{{relationship.dest}}'>{{relationship.dest}}</a>

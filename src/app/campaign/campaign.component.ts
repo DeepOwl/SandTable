@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angula
   styleUrls: ['./campaign.component.css']
 })
 export class CampaignComponent implements OnInit {
-  entities:Observable<any[]>;
+  entities:Observable<Entity[]>;
   entity:Entity;
   campaignId:string;
   entityId:string;
@@ -33,14 +33,14 @@ export class CampaignComponent implements OnInit {
       if(this.campaignId != campaignId){
         this.campaignId = campaignId;
         _campaign.setCampaignId(campaignId);
-        this.entities = _campaign.getEntities(campaignId);
+        this.entities = _campaign.getEntities();
         console.log('new campaign id', campaignId);
       }
       if(entityId != this.entityId){
         console.log('new entity id', entityId);
         this.entityId = entityId;
         _campaign.setEntityId(entityId);
-        _campaign.getEntity(campaignId, entityId).subscribe(entity => {
+        _campaign.getEntity(entityId).subscribe(entity => {
           this.entity = entity;
         });
       }

@@ -1,47 +1,79 @@
 <mat-card>
 <mat-card-header>
   <mat-card-title>
-    <h2 *ngIf="!editingName" (click)="editingName=true">{{entity.name}}</h2>
+    <h2 *ngIf="!editingName" (click)="clickEditName()">{{entity.name}}</h2>
     <ng-container *ngIf="editingName">
       <mat-form-field>
         <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="entity.name">
+        <input matInput [(ngModel)]="entity.name" (keyup.enter)="clickDoneName()">
       </mat-form-field>
-      <button mat-button (click)="editingName=false">
+      <button mat-button (click)="clickDoneName()">
         <mat-icon >check</mat-icon>
       </button>
     </ng-container>
     </mat-card-title>
   <mat-card-subtitle>
-    <div *ngIf="!editingSubtitle" (click)="editingSubtitle=true">{{entity.subtitle}}</div>
-    <div *ngIf="!editingSubtitle && !entity.subtitle" (click)="editingSubtitle=true">click to add subtitle</div>
+    <div *ngIf="!editingSubtitle" (click)="clickEditSubtitle()">{{entity.subtitle}}</div>
+    <div *ngIf="!editingSubtitle && !entity.subtitle" (click)="clickEditSubtitle()">click to add subtitle</div>
     <ng-container *ngIf="editingSubtitle">
       <mat-form-field>
         <mat-label>Subtitle</mat-label>
-        <input matInput [(ngModel)]="entity.subtitle">
+        <input matInput [(ngModel)]="entity.subtitle" (keyup.enter)="clickDoneSubtitle()">
       </mat-form-field>
-      <button mat-button (click)="editingSubtitle=false">
+      <button mat-button (click)="clickDoneSubtitle()">
         <mat-icon >check</mat-icon>
       </button>
     </ng-container>
     </mat-card-subtitle>
 </mat-card-header>
 <mat-card-content>
-  <p *ngIf="!editingDesc" (click)="editingDesc=true">Description: {{entity.description}}</p>
+  <p *ngIf="!editingDesc" (click)="clickEditDesc()">Description: {{entity.description}}</p>
   <ng-container *ngIf="editingDesc">
-    <form>
+    <form (ngSubmit)="clickDoneDesc()">
     <mat-form-field class="example-full-width">
       <mat-label>Description</mat-label>
       <textarea  name="description" matInput [(ngModel)]="entity.description"></textarea>
     </mat-form-field>
-    <button mat-button (click)="editingDesc=false">
+    <button mat-button (click)="clickDoneDesc()">
       <mat-icon >check</mat-icon>
     </button>
   </form>
   </ng-container>
 
   <h4>Relationships</h4>
-  <app-relationship *ngFor="let rel of entity.relationships" [relationship]='rel'></app-relationship>
+  <button mat-mini-fab (click)="addingRelationship=true"><mat-icon>add</mat-icon></button>
+  <div *ngIf="addingRelationship">
+
+    <form>
+      {{entity.name}}
+      <mat-form-field>
+        <mat-label>Relationship</mat-label>
+        <input  matInput [matAutocomplete]="auto2" [formControl]="relationshipCtrl">
+        <mat-autocomplete #auto2="matAutocomplete">
+          <mat-option *ngFor="let r of filteredRelationships | async" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    <mat-form-field>
+      <mat-label>Other</mat-label>
+      <input  matInput [matAutocomplete]="auto" [formControl]="entityCtrl">
+      <mat-autocomplete #auto="matAutocomplete" >
+        <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)=changedRelationshipEntity(e)>
+          {{e.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <button mat-button (click)="createRelationship()">
+      <mat-icon >check</mat-icon>
+    </button>
+  </form>
+  </div>
+  <mat-list>
+    <mat-list-item dense *ngFor="let rel of relationships">
+      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
+    </mat-list-item>
+  </mat-list>
 </mat-card-content>
 <mat-card-actions>
   <button (click)="deleteEntity()" mat-raised-button color='warning'>DELETE</button>

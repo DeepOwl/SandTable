@@ -5,5 +5,5 @@ export interface Entity {
   name:string;
   subtitle?:string;
   description?:string;
-  relationships:any[];
+  relationships?:any[];
 }

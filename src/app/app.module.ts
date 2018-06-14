@@ -14,6 +14,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {MatInputModule} from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -41,7 +42,8 @@ import { RelationshipComponent } from './campaign/relationship/relationship.comp
     AngularFirestoreModule,
     AngularFireAuthModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatToolbarModule,MatListModule,
-    MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule
+    MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

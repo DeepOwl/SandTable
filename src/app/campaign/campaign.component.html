@@ -18,7 +18,6 @@
 </mat-card>
 
 <app-entity class="example-card example-container" *ngIf='entity' [entity]='entity'></app-entity>
-
 <div *ngFor="let e of entities | async">
   <app-entity-mini routerLink='../{{e.id}}'[entity]='e'></app-entity-mini>
 
