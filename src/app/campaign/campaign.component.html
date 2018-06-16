@@ -1,17 +1,16 @@
-<mat-sidenav-container class="example-container" >
-  <mat-sidenav class="example-sidenav" mode="side" opened>
-    <mat-list>
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav cdkScrollable shadow class="example-sidenav" mode="side" opened="true">
+    <mat-nav-list>
       <div  *ngFor="let e of entities | async">
         <app-entity-mini  routerLink='../{{e.id}}' [entity]='e'></app-entity-mini>
         <mat-divider></mat-divider>
       </div>
-  </mat-list>
+  </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content class="example-content">
-
+  <mat-sidenav-content cdkScrollable class="example-content">
   <mat-card *ngIf="creatingEntity" class="example-card">
     <mat-card-header><mat-card-title><h2>New Entity</h2></mat-card-title></mat-card-header>
-    <form class="example-container" [formGroup]="entityForm" (ngSubmit)="onFormSubmit()">
+    <form [formGroup]="entityForm" (ngSubmit)="onFormSubmit()" class="multiline-form">
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input formControlName="name" matInput placeholder="Sample McSample" autocomplete='off'>
@@ -28,7 +27,8 @@
   </form>
   </mat-card>
 
-  <app-entity class="example-card example-container" *ngIf='entity' [entity]='entity'></app-entity>
+
+  <app-entity *ngIf='entity' [entity]='entity'></app-entity>
 
   <button (click)="creatingEntity=true" class="floating-fab" mat-fab><mat-icon>add</mat-icon></button>
 </mat-sidenav-content>
