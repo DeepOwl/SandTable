@@ -32,7 +32,7 @@ export class CampaignService {
   getEntity(entityId:string):Observable<Entity>{
      return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc<Entity>(entityId).snapshotChanges().pipe(
        map(a => {
-         console.log(a);
+         //console.log(a);
          if(a.payload.exists){
            const data = a.payload.data() as Entity;
            const id = a.payload.id;
@@ -55,14 +55,14 @@ export class CampaignService {
     );
   }
 
-  getRelationships(){
-    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection('relationships', ref=>ref.where("src",'==',this.entityId)).snapshotChanges().pipe(
+  getRelationships(direction:string){
+
+    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection('relationships', ref=>ref.where(direction, '==',this.entityId)).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
         return { id, ...data };
       }))
-
     );
   }
 
@@ -85,6 +85,9 @@ export class CampaignService {
   }
   deleteEntity(entityId:string){
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).delete();
+  }
+  deleteRelationship(relationshipId:string){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').doc(relationshipId).delete();
   }
 
   updateEntityName(entityId:string, name:string):Promise<void>{

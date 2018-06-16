@@ -11,6 +11,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
+import {MatSidenavModule} from '@angular/material/sidenav'
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {MatInputModule} from '@angular/material/input';
@@ -43,7 +44,7 @@ import { RelationshipComponent } from './campaign/relationship/relationship.comp
     AngularFireAuthModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatToolbarModule,MatListModule,
     MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule, MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]

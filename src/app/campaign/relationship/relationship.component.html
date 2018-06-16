@@ -1,5 +1,10 @@
-<a *ngIf="srcEntity" routerLink='../{{relationship.src}}'>{{srcEntity.name}}</a>
+<a *ngIf="!isSrc && srcEntity" routerLink='../{{relationship.src}}'>{{srcEntity.name}}</a>
+<ng-container *ngIf="isSrc">{{srcEntity.name}}</ng-container>
 <a *ngIf="!srcEntity" routerLink='../{{relationship.src}}'>{{relationship.src}}</a>
 {{relationship.relationship}}
-<a *ngIf="destEntity" routerLink='../{{relationship.dest}}'>{{destEntity.name}}</a>
+<a *ngIf="!isDest && destEntity" routerLink='../{{relationship.dest}}'>{{destEntity.name}}</a>
+<ng-container *ngIf="isDest">{{destEntity.name}}</ng-container>
 <a *ngIf="!destEntity" routerLink='../{{relationship.dest}}'>{{relationship.dest}}</a>
+<button mat-icon-button color="warn" (click)="deleteRelationship()">
+  <mat-icon>clear</mat-icon>
+</button>

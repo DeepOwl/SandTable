@@ -14,7 +14,8 @@ import { Observable } from 'rxjs/Observable';
 export class EntityComponent implements OnInit {
   @Input() entity:Entity;
   entities:Entity[];
-  relationships:any[];
+  relationshipsIn:any[];
+  relationshipsOut:any[];
   //entities:Observable<Entity[]>;
   filteredEntities: Observable<any[]>;
   entityCtrl:FormControl;
@@ -26,11 +27,13 @@ export class EntityComponent implements OnInit {
   editingSubtitle:boolean = false;
   availableRelationships = ["knows", "owns", "is a member of"]
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService) {
-    _campaign.getRelationships().subscribe(relationships=>this.relationships = relationships);
+    _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
+    _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
     _campaign.getEntities().subscribe(entities=>this.entities = entities);
     _campaign.entityChanged$.subscribe(id=>{
         this.relationships = [];
-        _campaign.getRelationships().subscribe(relationships=>this.relationships = relationships);
+        _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
+        _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
     });
 
     this.entityCtrl  = new FormControl();
@@ -72,6 +75,18 @@ export class EntityComponent implements OnInit {
 
   createRelationship(){
     this._campaign.addRelationship(this.entity, this.relationshipCtrl.value, this.relationshipEntity);
+    this.entityCtrl.reset();
+    this.relationshipCtrl.reset();
+  }
+  deleteRelationship(relationship){
+    this._campaign.deleteRelationship(relationship.id);
+  }
+
+  closeCreateRelationship(){
+    this.addingRelationship = false;
+        this.entityCtrl.reset();
+        this.relationshipCtrl.reset();
+        this.relationshipEntity = null
   }
 
   clickDoneName(){

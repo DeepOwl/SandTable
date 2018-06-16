@@ -40,15 +40,17 @@
   </form>
   </ng-container>
 
-  <h4>Relationships</h4>
-  <button mat-mini-fab (click)="addingRelationship=true"><mat-icon>add</mat-icon></button>
-  <div *ngIf="addingRelationship">
+  <h4>Relationships
+    <button *ngIf="!addingRelationship" mat-icon-button (click)="addingRelationship=true"><mat-icon>add</mat-icon></button>
+    <button *ngIf="addingRelationship" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
+  </h4>
 
-    <form>
+    <form *ngIf="addingRelationship">
       {{entity.name}}
       <mat-form-field>
         <mat-label>Relationship</mat-label>
         <input  matInput [matAutocomplete]="auto2" [formControl]="relationshipCtrl">
+          <button mat-button *ngIf="relationshipCtrl.value" matSuffix mat-icon-button (click)="relationshipCtrl.reset()"><mat-icon>close</mat-icon></button>
         <mat-autocomplete #auto2="matAutocomplete">
           <mat-option *ngFor="let r of filteredRelationships | async" [value]="r">
             {{r}}
@@ -58,19 +60,22 @@
     <mat-form-field>
       <mat-label>Other</mat-label>
       <input  matInput [matAutocomplete]="auto" [formControl]="entityCtrl">
+      <button mat-button *ngIf="entityCtrl.value" matSuffix mat-icon-button (click)="entityCtrl.reset();relationshipEntity=null"><mat-icon>close</mat-icon></button>
       <mat-autocomplete #auto="matAutocomplete" >
         <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)=changedRelationshipEntity(e)>
           {{e.name}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <button mat-button (click)="createRelationship()">
+    <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
       <mat-icon >check</mat-icon>
     </button>
   </form>
-  </div>
   <mat-list>
-    <mat-list-item dense *ngFor="let rel of relationships">
+    <mat-list-item dense *ngFor="let rel of relationshipsOut">
+      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
+    </mat-list-item>
+    <mat-list-item dense *ngFor="let rel of relationshipsIn">
       <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
     </mat-list-item>
   </mat-list>

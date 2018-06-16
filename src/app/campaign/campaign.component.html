@@ -1,24 +1,35 @@
+<mat-sidenav-container class="example-container" >
+  <mat-sidenav class="example-sidenav" mode="side" opened>
+    <mat-list>
+      <div  *ngFor="let e of entities | async">
+        <app-entity-mini  routerLink='../{{e.id}}' [entity]='e'></app-entity-mini>
+        <mat-divider></mat-divider>
+      </div>
+  </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="example-content">
 
-<mat-card class="example-card">
-  <form class="example-container" [formGroup]="entityForm" (ngSubmit)="onFormSubmit()">
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input formControlName="name" matInput placeholder="Sample McSample" autocomplete='off'>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Subtitle</mat-label>
-    <input formControlName="subtitle" matInput placeholder="King of Sampledom" autocomplete='off'>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <textarea formControlName="description" matInput placeholder="Description" autocomplete='off'></textarea>
-  </mat-form-field>
-  <button [disabled]="entityForm.status !== 'VALID'"  mat-raised-button color="accent" >Submit</button>
-</form>
-</mat-card>
+  <mat-card *ngIf="creatingEntity" class="example-card">
+    <mat-card-header><mat-card-title><h2>New Entity</h2></mat-card-title></mat-card-header>
+    <form class="example-container" [formGroup]="entityForm" (ngSubmit)="onFormSubmit()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Sample McSample" autocomplete='off'>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Subtitle</mat-label>
+      <input formControlName="subtitle" matInput placeholder="King of Sampledom" autocomplete='off'>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput placeholder="Description" autocomplete='off'></textarea>
+    </mat-form-field>
+    <button [disabled]="entityForm.status !== 'VALID'"  mat-raised-button color="accent" >Submit</button>
+  </form>
+  </mat-card>
 
-<app-entity class="example-card example-container" *ngIf='entity' [entity]='entity'></app-entity>
-<div *ngFor="let e of entities | async">
-  <app-entity-mini routerLink='../{{e.id}}'[entity]='e'></app-entity-mini>
+  <app-entity class="example-card example-container" *ngIf='entity' [entity]='entity'></app-entity>
 
-</div>
+  <button (click)="creatingEntity=true" class="floating-fab" mat-fab><mat-icon>add</mat-icon></button>
+</mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,12 +1,28 @@
 .example-container {
   display: flex;
   flex-direction: column;
+  min-height:79vh
 }
 
 .example-container > * {
-  width: 100%;
+  width: 80%;
+}
+
+.example-content{
+  height:100%
 }
 
 .example-card {
   margin:5vh;
+}
+
+
+.example-sidenav{
+  max-width:20%
+}
+
+.floating-fab{
+  position: fixed;
+  bottom:50px;
+  right:50px;
 }
