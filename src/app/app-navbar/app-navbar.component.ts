@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app-navbar.component.css']
 })
 export class AppNavbarComponent implements OnInit {
-
+  title:string  = "SandTable"
   constructor() { }
 
   ngOnInit() {

@@ -21,6 +21,7 @@ export class CampaignComponent implements OnInit {
   entityId:string;
   entityForm: FormGroup;
   filterName:string;
+  creatingEntity:boolean = false;
   types:string[] = ["character","group", "item", "objective"];
   constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder) {
     this.entityForm = fb.group({
@@ -41,10 +42,11 @@ export class CampaignComponent implements OnInit {
       }
       if(entityId != this.entityId){
         console.log('new entity id', entityId);
-        this._campaign.updateEntityTouched(entityId);
+        //this._campaign.updateEntityTouched(entityId);
         this.entityId = entityId;
         _campaign.setEntityId(entityId);
         _campaign.getEntity(entityId).subscribe(entity => {
+          console.log("_campaign.getEntity() triggered")
           this.entity = entity;
         });
       }

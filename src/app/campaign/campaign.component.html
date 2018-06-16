@@ -1,5 +1,5 @@
-<mat-sidenav-container class="example-container" autosize>
-  <mat-sidenav cdkScrollable shadow class="example-sidenav" mode="side" opened="true">
+<mat-sidenav-container class="example-container" autosize (swiperight)="sidenav.open()">
+  <mat-sidenav #sidenav cdkScrollable shadow class="example-sidenav" mode="side" opened="true" (swipeleft)="sidenav.close()">
       <mat-form-field style="margin:5px;">
         <input matInput [(ngModel)]="filterName" placeholder="Filter names" autocomplete="off">
         <button mat-button *ngIf="filterName" matSuffix mat-icon-button (click)="filterName=''"><mat-icon>close</mat-icon></button>
@@ -14,7 +14,7 @@
       </div>
   </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content cdkScrollable class="example-content">
+  <mat-sidenav-content cdkScrollable class="example-content" (swiperight)="sidenav.open()">
   <mat-card *ngIf="creatingEntity" class="example-card">
     <mat-card-header><mat-card-title><h2>New Entity</h2></mat-card-title></mat-card-header>
     <form [formGroup]="entityForm" (ngSubmit)="onFormSubmit()" class="multiline-form">

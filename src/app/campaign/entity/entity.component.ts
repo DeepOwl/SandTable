@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, SimpleChange } from '@angular/core';
 import { Entity } from '../../_models/entity'
 import { RelationshipComponent } from '../relationship/relationship.component'
 import { CampaignService }  from '../../_services/campaign.service'
@@ -16,6 +16,8 @@ export class EntityComponent implements OnInit {
   entities:Entity[];
   relationshipsIn:any[];
   relationshipsOut:any[];
+  relationshipsIn$:Observable<any[]>;
+  relationshipsOut$:Observable<any[]>;
   //entities:Observable<Entity[]>;
   filteredEntities: Observable<any[]>;
   entityCtrl:FormControl;
@@ -28,14 +30,22 @@ export class EntityComponent implements OnInit {
   addingRelationship:boolean = false;
   availableRelationships = ["knows", "owns", "is a member of"]
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService) {
-    _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
-    _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
+    console.log("EntityComponent Constructor")
+    //_campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
+    //_campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
     _campaign.getEntities().subscribe(entities=>this.entities = entities);
     _campaign.entityChanged$.subscribe(id=>{
-        this.relationshipsIn = [];
-        this.relationshipsOut = [];
-        _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
-        _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
+      // console.log("_campaign.entityChanged$ triggered")
+      //   this.relationshipsIn = [];
+      //   this.relationshipsOut = [];
+      //   _campaign.getRelationships("src").subscribe(relationships=>{
+      //     console.log("entity.relationshipsIn changed";
+      //     this.relationshipsIn = relationships
+      //   });
+      //   _campaign.getRelationships("dest").subscribe(relationships=>{
+      //     console.log("entity.relationshipsOut changed";
+      //     this.relationshipsOut = relationships}
+      //   );
     });
 
     this.entityCtrl  = new FormControl();
@@ -56,6 +66,21 @@ export class EntityComponent implements OnInit {
 
   ngOnInit() {
   }
+  ngOnChanges(changes:SimpleChanges){
+    console.log("entity input changed")
+      this.relationshipsIn = [];
+      this.relationshipsOut = [];
+      this.relationshipsIn$ = this._campaign.getRelationships("src");
+      this.relationshipsOut$ = this._campaign.getRelationships("dest");
+      this._campaign.getRelationships("src").subscribe(relationships=>{
+        console.log("entity.relationshipsIn changed");
+        //this.relationshipsIn = relationships
+      });
+      this._campaign.getRelationships("dest").subscribe(relationships=>{
+        console.log("entity.relationshipsOut changed");
+        //this.relationshipsOut = relationships}
+      });
+  }
   changedRelationshipEntity(entity:Entity){
     console.log('changedRelationshipEntity', entity);
     this.relationshipEntity = entity;
@@ -74,7 +99,7 @@ export class EntityComponent implements OnInit {
     this.entity.pin = !this.entity.pin;
     this._campaign.updateEntityPin(this.entity.id, this.entity.pin);
   }
-  deleteEntity(entity){
+  deleteEntity(){
     this._campaign.deleteEntity(this.entity.id);
     this.router.navigate(['../none'], {relativeTo: this.route});
   }

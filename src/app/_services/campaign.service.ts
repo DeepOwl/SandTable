@@ -32,7 +32,7 @@ export class CampaignService {
   getEntity(entityId:string):Observable<Entity>{
      return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc<Entity>(entityId).snapshotChanges().pipe(
        map(a => {
-         //console.log(a);
+         console.log(a);
          if(a.payload.exists){
            const data = a.payload.data() as Entity;
            const id = a.payload.id;
