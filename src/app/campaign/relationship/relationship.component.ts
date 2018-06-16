@@ -8,7 +8,7 @@ import { Entity } from '../../_models/entity'
   styleUrls: ['./relationship.component.css']
 })
 export class RelationshipComponent implements OnInit {
-  @Input() relationship: {dest:string, relationship:string, src:string};
+  @Input() relationship: {id:string, dest:string, relationship:string, src:string};
   destEntity:Entity;
   srcEntity:Entity;
   @Input() entity;

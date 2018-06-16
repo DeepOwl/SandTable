@@ -100,7 +100,7 @@ export class CampaignService {
 
   updateEntityTouched(entityId:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
-      'touched_at':new Date();
+      'touched_at':new Date()
     })
   }
   updateEntityPin(entityId:string, isPinned:boolean):Promise<void>{

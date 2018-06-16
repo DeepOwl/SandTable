@@ -25,6 +25,7 @@ export class EntityComponent implements OnInit {
   editingName:boolean = false;
   editingDesc:boolean = false;
   editingSubtitle:boolean = false;
+  addingRelationship:boolean = false;
   availableRelationships = ["knows", "owns", "is a member of"]
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService) {
     _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
