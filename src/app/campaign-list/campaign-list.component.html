@@ -1,4 +1,4 @@
-
+<div style="margin-top:64px;">
   <mat-card *ngFor="let campaign of campaigns | async">
     <mat-card-header>
       <mat-card-title>{{campaign.name}}</mat-card-title>
@@ -8,6 +8,7 @@
       <pre>{{campaign | json}}</pre>
     </mat-card-content>
     <mat-card-actions>
-      <button routerLink='/campaign/{{campaign.id}}/none'mat-button>EMBARK</button>
+      <button routerLink='/campaign/{{campaign.id}}'mat-button>EMBARK</button>
     </mat-card-actions>
   </mat-card>
+</div>

@@ -18,7 +18,7 @@ export class CampaignService {
   getEntities():Observable<any>{
      //return this.afs.collection('campaigns').doc(campaignId).collection('entities').valueChanges();
      //var entityCollection = afs.collection<Campaign>('campaigns');
-     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').snapshotChanges().pipe(
+     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities', ref=>ref.orderBy("pin", 'desc')).snapshotChanges().pipe(
        map(actions => actions.map(a => {
          const data = a.payload.doc.data() as Entity;
          const id = a.payload.doc.id;
@@ -81,6 +81,7 @@ export class CampaignService {
   }
 
   addEntity(campaignId:string, entity: Entity){
+    console.log("new entity", entity);
     return this.afs.collection('campaigns').doc(campaignId).collection('entities').add(entity);
   }
   deleteEntity(entityId:string){
@@ -92,17 +93,33 @@ export class CampaignService {
 
   updateEntityName(entityId:string, name:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
-      'name':name
+      'name':name,
+      'updated_at':new Date()
     })
   }
+
+  updateEntityTouched(entityId:string):Promise<void>{
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
+      'touched_at':new Date();
+    })
+  }
+  updateEntityPin(entityId:string, isPinned:boolean):Promise<void>{
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
+      'pin':isPinned,
+      'updated_at':new Date()
+    })
+  }
+
   updateEntitySubtitle(entityId:string, subtitle:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
-      'subtitle':subtitle
+      'subtitle':subtitle,
+      'updated_at':new Date()
     })
   }
   updateEntityDescription(entityId:string, description:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
-      'description':description
+      'description':description,
+      'updated_at':new Date()
     })
   }
 

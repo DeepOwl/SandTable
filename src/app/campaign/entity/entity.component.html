@@ -11,6 +11,7 @@
         <mat-icon >check</mat-icon>
       </button>
     </ng-container>
+
     </mat-card-title>
   <mat-card-subtitle>
     <div *ngIf="!editingSubtitle" (click)="clickEditSubtitle()">{{entity.subtitle}}</div>
@@ -25,8 +26,10 @@
       </button>
     </ng-container>
     </mat-card-subtitle>
+
 </mat-card-header>
 <mat-card-content>
+  <mat-chip-list><mat-chip>{{entity.type}}</mat-chip></mat-chip-list>
   <p *ngIf="!editingDesc" (click)="clickEditDesc()">Description: {{entity.description}}</p>
   <ng-container *ngIf="editingDesc">
     <form (ngSubmit)="clickDoneDesc()">
@@ -81,6 +84,7 @@
   </mat-list>
 </mat-card-content>
 <mat-card-actions>
-  <button (click)="deleteEntity()" mat-raised-button color='warning'>DELETE</button>
+    <button (click)="togglePin()" mat-icon-button><mat-icon *ngIf="entity.pin">star</mat-icon><mat-icon *ngIf="!entity.pin">star_border</mat-icon></button>
+  <button (click)="deleteEntity()" mat-raised-button color='warn'>DELETE</button>
 </mat-card-actions>
 </mat-card>

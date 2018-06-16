@@ -47,7 +47,7 @@ export class RelationshipComponent implements OnInit {
 
 
   deleteRelationship(){
-    this._campaign.deleteRelationship(this.relationship.id));
+    this._campaign.deleteRelationship(this.relationship.id);
   }
 
 }

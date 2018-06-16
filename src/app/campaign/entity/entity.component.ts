@@ -31,7 +31,8 @@ export class EntityComponent implements OnInit {
     _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
     _campaign.getEntities().subscribe(entities=>this.entities = entities);
     _campaign.entityChanged$.subscribe(id=>{
-        this.relationships = [];
+        this.relationshipsIn = [];
+        this.relationshipsOut = [];
         _campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
         _campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
     });
@@ -68,6 +69,10 @@ export class EntityComponent implements OnInit {
     rel.toLowerCase().indexOf(relationship.toLowerCase()) === 0);
   }
 
+  togglePin(){
+    this.entity.pin = !this.entity.pin;
+    this._campaign.updateEntityPin(this.entity.id, this.entity.pin);
+  }
   deleteEntity(entity){
     this._campaign.deleteEntity(this.entity.id);
     this.router.navigate(['../none'], {relativeTo: this.route});

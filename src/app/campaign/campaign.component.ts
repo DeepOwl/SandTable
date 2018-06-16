@@ -20,11 +20,14 @@ export class CampaignComponent implements OnInit {
   campaignId:string;
   entityId:string;
   entityForm: FormGroup;
+  filterName:string;
+  types:string[] = ["character","group", "item", "objective"];
   constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder) {
     this.entityForm = fb.group({
       name: [null, Validators.required],
       subtitle: [null, Validators.required],
-      description: [null, Validators.required]
+      description: [null, Validators.required],
+      type:[null, Validators.required]
     })
     route.paramMap.subscribe(params => {
       const campaignId = params.get('campaign');
@@ -38,6 +41,7 @@ export class CampaignComponent implements OnInit {
       }
       if(entityId != this.entityId){
         console.log('new entity id', entityId);
+        this._campaign.updateEntityTouched(entityId);
         this.entityId = entityId;
         _campaign.setEntityId(entityId);
         _campaign.getEntity(entityId).subscribe(entity => {
@@ -61,9 +65,12 @@ export class CampaignComponent implements OnInit {
       name:formModel.name as string,
       created_at:new Date(),
       updated_at:new Date(),
+      touched_at:new Date(),
+      type:formModel.type as string,
       subtitle:formModel.subtitle as string,
       description:formModel.description as string,
-      relationships:[]};
+      pin:false
+    };
 
     var ret = this._campaign.addEntity(this.campaignId, entity);
     ret.then(docRef => {
@@ -72,6 +79,16 @@ export class CampaignComponent implements OnInit {
     console.log(ret);
     this.rebuildForm();
   }
+
+  filterEntityList(e:Entity):boolean{
+    if(!this.filterName) return true;
+    if( e.name.toLowerCase().indexOf(this.filterName.toLowerCase()) >=0 ){
+      return true;
+    }
+    return false;
+
+  }
+
 
 
 }

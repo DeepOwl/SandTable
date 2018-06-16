@@ -1,4 +1,5 @@
 <mat-list-item [disableRipple]=false>
+  <mat-icon *ngIf="entity.pin">star</mat-icon>
   <h4 matLine>{{entity.name}}</h4>
   <p matLine>{{entity.subtitle}}</p>
 </mat-list-item>

@@ -13,9 +13,12 @@ import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {MatSidenavModule} from '@angular/material/sidenav'
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips'
+
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -44,7 +47,7 @@ import { RelationshipComponent } from './campaign/relationship/relationship.comp
     AngularFireAuthModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatToolbarModule,MatListModule,
     MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule,
-    MatAutocompleteModule, MatSidenavModule
+    MatAutocompleteModule, MatSidenavModule, MatSelectModule, MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
