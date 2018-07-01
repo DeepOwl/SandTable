@@ -70,7 +70,6 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    {{relationshipEntity | json}}
     <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
       <mat-icon >check</mat-icon>
     </button>
