@@ -1,9 +1,11 @@
 .example-container {
   position:absolute;
   top:64px;
-  min-height:100%;
+  display:flex;
+  flex-direction:column;
   height: auto! important;
   margin:0;
+  bottom:0;
   padding:10px;
   width:100%;
 
@@ -13,6 +15,12 @@
   height:100%;
   overflow:auto;
   height: auto! important;
+  z-index:1;
+}
+
+.example-is-mobile .example-toolbar{
+  position:fixed;
+  z-index:2;
 }
 
 
@@ -30,7 +38,7 @@
 
 
 .example-sidenav{
-  z-index: 2;
+  z-index: 4;
   position:fixed;
   top:64px;
   bottom:0;
@@ -38,10 +46,16 @@
   padding:0;
   min-width:260px;
   max-width:260px;
+  flex:1;
+}
+
+.example-is-mobile {
+  flex:1 0 auto;
+  z-index: 4;
 }
 
 .floating-fab{
   position: fixed;
-  bottom:50px;
-  right:50px;
+  bottom:20px;
+  right:20px;
 }

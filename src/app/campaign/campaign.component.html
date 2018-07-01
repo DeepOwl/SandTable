@@ -1,10 +1,10 @@
-<mat-sidenav-container class="example-container" autosize (swiperight)="sidenav.open()">
-  <mat-sidenav #sidenav cdkScrollable shadow class="example-sidenav" mode="side" opened="true" (swipeleft)="sidenav.close()">
+<mat-sidenav-container [class.example-is-mobile]="mobileQuery.matches" class="example-container" autosize >
+  <mat-sidenav #sidenav cdkScrollable shadow class="example-sidenav" [mode]="mobileQuery.matches ? 'over' : 'side'" opened="true" >
       <mat-form-field style="margin:5px;">
         <input matInput [(ngModel)]="filterName" placeholder="Filter names" autocomplete="off">
         <button mat-button *ngIf="filterName" matSuffix mat-icon-button (click)="filterName=''"><mat-icon>close</mat-icon></button>
       </mat-form-field>
-    <mat-nav-list>
+    <mat-nav-list cdkScrollable>
 
       <div  *ngFor="let e of entities | async">
         <div *ngIf="filterEntityList(e)">
@@ -14,7 +14,7 @@
       </div>
   </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content cdkScrollable class="example-content" (swiperight)="sidenav.open()">
+  <mat-sidenav-content cdkScrollable class="example-content">
   <mat-card *ngIf="creatingEntity" class="example-card">
     <mat-card-header><mat-card-title><h2>New Entity</h2></mat-card-title></mat-card-header>
     <form [formGroup]="entityForm" (ngSubmit)="onFormSubmit()" class="multiline-form">
@@ -40,9 +40,11 @@
   </form>
   </mat-card>
 
+  <app-entity *ngIf='entity && !creatingEntity' [entity]='entity'></app-entity>
 
-  <app-entity *ngIf='entity' [entity]='entity'></app-entity>
-
-  <button (click)="creatingEntity=true" class="floating-fab" mat-fab><mat-icon>add</mat-icon></button>
+  <button (click)="creatingEntity=!creatingEntity" class="floating-fab" mat-fab>
+    <mat-icon *ngIf="!creatingEntity">add</mat-icon>
+    <mat-icon *ngIf="creatingEntity">close</mat-icon>
+  </button>
 </mat-sidenav-content>
 </mat-sidenav-container>

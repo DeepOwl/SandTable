@@ -12,6 +12,8 @@ export class CampaignService {
   private campaignCollection: AngularFirestoreCollection<Campaign>;
   private entitySubject = new Subject<string>();
   entityChanged$ = this.entitySubject.asObservable();
+  private sidenavSubject = new Subject<boolean>();
+  sidnavToggle$ = this.sidenavSubject.asObservable();
   constructor(private afs: AngularFirestore) { }
   entityId:string;
   campaignId:string;
@@ -123,5 +125,8 @@ export class CampaignService {
     })
   }
 
+  toggleSidenav(){
+    this.sidenavSubject.next(true);
+  }
 
 }

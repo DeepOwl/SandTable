@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -7,7 +7,7 @@ import { Entity } from '../_models/entity'
 import { EntityComponent } from './entity/entity.component';
 import { EntityMiniComponent } from './entity-mini/entity-mini.component';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
-
+import {MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-campaign',
@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angula
   styleUrls: ['./campaign.component.css']
 })
 export class CampaignComponent implements OnInit {
+  @ViewChild('sidenav') public sidenav:any;
   entities:Observable<Entity[]>;
   entity:Entity;
   campaignId:string;
@@ -23,7 +24,13 @@ export class CampaignComponent implements OnInit {
   filterName:string;
   creatingEntity:boolean = false;
   types:string[] = ["character","group", "item", "objective"];
-  constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder) {
+  mobileQuery: MediaQueryList;
+  private _mobileQueryListener: ()=>void;
+  constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder, changeDetectorRef:ChangeDetectorRef, media:MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._campaign.sidnavToggle$.subscribe(res=>{this.sidenav.toggle()});
     this.entityForm = fb.group({
       name: [null, Validators.required],
       subtitle: [null, Validators.required],
@@ -55,6 +62,9 @@ export class CampaignComponent implements OnInit {
    }
 
   ngOnInit() {
+  }
+  ngOnDestroy():void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   rebuildForm() {

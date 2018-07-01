@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CampaignService } from '../_services/campaign.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './app-navbar.component.html',
@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppNavbarComponent implements OnInit {
   title:string  = "SandTable"
-  constructor() { }
+  constructor(private _campaign:CampaignService) { }
 
   ngOnInit() {
+  }
+
+  toggleSidenav(){
+    this._campaign.toggleSidenav();
   }
 
 }
