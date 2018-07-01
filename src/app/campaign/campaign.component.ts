@@ -34,7 +34,7 @@ export class CampaignComponent implements OnInit {
     this.entityForm = fb.group({
       name: [null, Validators.required],
       subtitle: [null, Validators.required],
-      description: [null, Validators.required],
+      description: [""],
       type:[null, Validators.required]
     })
     route.paramMap.subscribe(params => {
