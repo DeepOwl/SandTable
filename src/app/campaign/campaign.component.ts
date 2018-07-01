@@ -86,7 +86,7 @@ export class CampaignComponent implements OnInit {
 
     var ret = this._campaign.addEntity(this.campaignId, entity);
     ret.then(docRef => {
-      this.router.navigate(['../'+docRef.id], {relativeTo: this.route});
+      this.router.navigate(['campaign/'+this.campaignId+'/'+docRef.id]);
     });
     console.log(ret);
     this.rebuildForm();
