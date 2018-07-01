@@ -81,9 +81,11 @@ export class EntityComponent implements OnInit {
         //this.relationshipsOut = relationships}
       });
   }
-  changedRelationshipEntity(entity:Entity){
-    console.log('changedRelationshipEntity', entity);
-    this.relationshipEntity = entity;
+  changedRelationshipEntity(event, entity:Entity){
+    console.log('changedRelationshipEntity', event);
+    if(event.source.selected){
+      this.relationshipEntity = entity;
+    }
   }
 
   filterEntities(name: any):Entity[] {
@@ -108,6 +110,7 @@ export class EntityComponent implements OnInit {
     this._campaign.addRelationship(this.entity, this.relationshipCtrl.value, this.relationshipEntity);
     this.entityCtrl.reset();
     this.relationshipCtrl.reset();
+    this.relationshipEntity = null;
   }
   deleteRelationship(relationship){
     this._campaign.deleteRelationship(relationship.id);

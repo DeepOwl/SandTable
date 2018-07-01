@@ -35,7 +35,7 @@
     <form (ngSubmit)="clickDoneDesc()">
     <mat-form-field class="example-full-width">
       <mat-label>Description</mat-label>
-      <textarea  name="description" matInput [(ngModel)]="entity.description"></textarea>
+      <textarea rows="4" name="description" matInput [(ngModel)]="entity.description"></textarea>
     </mat-form-field>
     <button mat-button (click)="clickDoneDesc()">
       <mat-icon >check</mat-icon>
@@ -65,16 +65,17 @@
       <input  matInput [matAutocomplete]="auto" [formControl]="entityCtrl">
       <button mat-button *ngIf="entityCtrl.value" matSuffix mat-icon-button (click)="entityCtrl.reset();relationshipEntity=null"><mat-icon>close</mat-icon></button>
       <mat-autocomplete #auto="matAutocomplete" >
-        <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)=changedRelationshipEntity(e)>
+        <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)="changedRelationshipEntity($event, e)">
           {{e.name}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    {{relationshipEntity | json}}
     <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
       <mat-icon >check</mat-icon>
     </button>
   </form>
-  <mat-list>
+  <mat-list dense>
     <mat-list-item dense *ngFor="let rel of relationshipsOut$|async">
       <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
     </mat-list-item>
