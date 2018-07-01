@@ -1,0 +1,15 @@
+<mat-card  class="example-card">
+  <mat-card-header><mat-card-title><h2>New campaign</h2></mat-card-title></mat-card-header>
+  <form [formGroup]="campaignForm" (ngSubmit)="onFormSubmit()" class="multiline-form">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="The Quest for More Axes" autocomplete='off'>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea formControlName="description" matInput placeholder="Description" autocomplete='off'></textarea>
+  </mat-form-field>
+  <button [disabled]="campaignForm.status !== 'VALID'"  mat-raised-button color="accent" >Submit</button>
+</form>
+</mat-card>

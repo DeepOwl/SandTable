@@ -125,6 +125,11 @@ export class CampaignService {
     })
   }
 
+  addCampaign(campaign:Campaign){
+    console.log("new campaign", campaign);
+    return this.afs.collection('campaigns').add(campaign);
+  }
+
   toggleSidenav(){
     this.sidenavSubject.next(true);
   }

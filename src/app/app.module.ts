@@ -28,6 +28,7 @@ import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { EntityComponent } from './campaign/entity/entity.component';
 import { EntityMiniComponent } from './campaign/entity-mini/entity-mini.component';
 import { RelationshipComponent } from './campaign/relationship/relationship.component';
+import { NewCampaignComponent } from './new-campaign/new-campaign.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RelationshipComponent } from './campaign/relationship/relationship.comp
     CampaignListComponent,
     EntityComponent,
     EntityMiniComponent,
-    RelationshipComponent
+    RelationshipComponent,
+    NewCampaignComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
