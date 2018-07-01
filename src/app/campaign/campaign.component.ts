@@ -23,7 +23,7 @@ export class CampaignComponent implements OnInit {
   entityForm: FormGroup;
   filterName:string;
   creatingEntity:boolean = false;
-  types:string[] = ["character","group", "item", "objective"];
+  types:string[] = ["character","group", "location", "item", "objective"];
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: ()=>void;
   constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder, changeDetectorRef:ChangeDetectorRef, media:MediaMatcher) {
