@@ -5,6 +5,9 @@
 <a *ngIf="!isDest && destEntity" routerLink='../{{relationship.dest}}'>{{destEntity.name}}</a>
 <ng-container *ngIf="isDest">{{destEntity.name}}</ng-container>
 <a *ngIf="!destEntity" routerLink='../{{relationship.dest}}'>{{relationship.dest}}</a>
+<button mat-icon-button (click)="editRelationship()">
+  <mat-icon>edit</mat-icon>
+</button>
 <button mat-icon-button color="warn" (click)="deleteRelationship()">
-  <mat-icon>clear</mat-icon>
+  <mat-icon>delete</mat-icon>
 </button>

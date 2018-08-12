@@ -29,7 +29,6 @@
 
 </mat-card-header>
 <mat-card-content>
-
   <mat-chip-list *ngIf="editing != 'tags'" class="example-full-width">
     <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable">
       {{tag}}
@@ -40,7 +39,7 @@
   </mat-chip-list>
 
   <mat-form-field  *ngIf="editing == 'tags'" class="example-full-width">
-    <mat-label>Add Tag</mat-label>
+    <mat-label>Edit tags</mat-label>
     <mat-chip-list #tagList>
       <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable" [removable]="chipsRemovable" (removed)="removeTag(tag)">
         {{tag}}
@@ -70,7 +69,7 @@
   </form>
   </ng-container>
 
-  <h4>Relationships
+  <h4 style='margin-bottom:0px'>Relationships
     <button *ngIf="editing != 'relationships'" mat-icon-button (click)="editing = 'relationships'"><mat-icon>add</mat-icon></button>
     <button *ngIf="editing == 'relationships'" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
   </h4>

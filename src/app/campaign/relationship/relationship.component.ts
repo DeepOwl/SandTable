@@ -1,6 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange} from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, SimpleChange, Inject} from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { CampaignService }  from '../../_services/campaign.service'
 import { Entity } from '../../_models/entity'
+
+export interface DialogData {
+  srcName:string, relationship:string, destName:string
+}
 
 @Component({
   selector: 'app-relationship',
@@ -15,7 +20,7 @@ export class RelationshipComponent implements OnInit {
   isSrc:boolean;
   isDest:boolean;
 
-  constructor(private _campaign:CampaignService) {
+  constructor(private _campaign:CampaignService, public dialog:MatDialog) {
 
   }
 
@@ -46,9 +51,51 @@ export class RelationshipComponent implements OnInit {
     }
   }
 
+  editRelationship(){
+    const dialogRef = this.dialog.open(DialogOverviewRelationshipDialog, {
+      width: '400px;',
+      data:{srcName:this.srcEntity.name, destName:this.destEntity.name, relationship:this.relationship.relationship}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('the dialog was closed');
+      //this.relationship.relationship = result;
+      if(result){
+        this._campaign.updateRelationship(this.relationship.id, result);
+      }
+    })
+  }
 
   deleteRelationship(){
     this._campaign.deleteRelationship(this.relationship.id);
   }
+
+}
+
+
+@Component({
+  selector: 'dialog-overview-relationship-dialog',
+  template: `
+  <h1 mat-dialog-title> Rename relationship</h1>
+  <div mat-dialog-content>
+  {{data.srcName}}
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.relationship">
+    </mat-form-field>
+    {{data.destName}}
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data.relationship" cdkFocusInitial>Ok</button>
+  </div>
+  `
+})
+export class DialogOverviewRelationshipDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewRelationshipDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+    onNoClick():void {
+      this.dialogRef.close();
+    }
 
 }

@@ -17,7 +17,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatChipsModule} from '@angular/material/chips'
+import {MatChipsModule} from '@angular/material/chips';
+import {MatDialogModule} from '@angular/material/dialog'
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -27,7 +28,7 @@ import { CampaignComponent } from './campaign/campaign.component';
 import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { EntityComponent } from './campaign/entity/entity.component';
 import { EntityMiniComponent } from './campaign/entity-mini/entity-mini.component';
-import { RelationshipComponent } from './campaign/relationship/relationship.component';
+import { RelationshipComponent, DialogOverviewRelationshipDialog } from './campaign/relationship/relationship.component';
 import { NewCampaignComponent } from './new-campaign/new-campaign.component';
 
 @NgModule({
@@ -38,7 +39,7 @@ import { NewCampaignComponent } from './new-campaign/new-campaign.component';
     CampaignListComponent,
     EntityComponent,
     EntityMiniComponent,
-    RelationshipComponent,
+    RelationshipComponent,DialogOverviewRelationshipDialog,
     NewCampaignComponent
   ],
   imports: [
@@ -49,9 +50,10 @@ import { NewCampaignComponent } from './new-campaign/new-campaign.component';
     AngularFireAuthModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatToolbarModule,MatListModule,
     MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule,
-    MatAutocompleteModule, MatSidenavModule, MatSelectModule, MatChipsModule,
+    MatAutocompleteModule, MatSidenavModule, MatSelectModule, MatChipsModule, MatDialogModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[DialogOverviewRelationshipDialog]
 })
 export class AppModule { }

@@ -94,6 +94,11 @@ export class CampaignService {
   deleteRelationship(relationshipId:string){
     return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').doc(relationshipId).delete();
   }
+  updateRelationship(relationshipId:string, newRelationship:string){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').doc(relationshipId).update({
+        'relationship':newRelationship
+    });
+  }
 
   updateEntityName(entityId:string, name:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
