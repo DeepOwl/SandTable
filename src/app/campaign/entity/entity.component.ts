@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
+import { MatChipInputEvent } from '@angular/material';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-entity',
   templateUrl: './entity.component.html',
@@ -28,7 +30,11 @@ export class EntityComponent implements OnInit {
   editingDesc:boolean = false;
   editingSubtitle:boolean = false;
   addingRelationship:boolean = false;
+  editingTags:boolean = false;
   availableRelationships = ["knows", "owns", "is a member of"]
+  tagEdit:string;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  chipsRemovable = true;
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService) {
     console.log("EntityComponent Constructor")
     //_campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
@@ -123,11 +129,35 @@ export class EntityComponent implements OnInit {
         this.relationshipEntity = null
   }
 
+  generateKeys(obj){
+    return obj ? Object.keys(obj) : null;
+  }
+
   clickDoneName(){
     this.editingName = false;
     this._campaign.updateEntityName(this.entity.id, this.entity.name);
 
   }
+
+clickDoneTag(value){
+  this._campaign.addEntityTag(this.entity.id, value);
+}
+
+addTag(event: MatChipInputEvent):void{
+  console.log(event);
+  const input = event.input;
+  const value = event.value;
+  if((value || '').trim()){
+    this._campaign.addEntityTag(this.entity.id, value);
+  }
+  if(input){
+    input.value = '';
+  }
+}
+removeTag(tag:string):void{
+  this._campaign.removeEntityTag(this.entity.id, tag);
+}
+
   clickEditName(){
     this.editingName = true;
     this.editingSubtitle = false;

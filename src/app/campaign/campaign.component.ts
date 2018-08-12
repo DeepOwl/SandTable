@@ -73,12 +73,16 @@ export class CampaignComponent implements OnInit {
 
   onFormSubmit(){
     const formModel = this.entityForm.value;
+    var tagsObject = {};
+    var tagName = formModel.type as string;
+    tagsObject[tagName] = true;
+    console.log(tagsObject);
     const entity:Entity = {
       name:formModel.name as string,
       created_at:new Date(),
       updated_at:new Date(),
       touched_at:new Date(),
-      type:formModel.type as string,
+      tags:tagsObject,
       subtitle:formModel.subtitle as string,
       description:formModel.description as string,
       pin:false

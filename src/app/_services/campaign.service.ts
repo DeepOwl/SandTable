@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import { Entity } from '../_models/entity'
 import { Campaign, CampaignId } from '../_models/campaign'
@@ -86,6 +87,7 @@ export class CampaignService {
     console.log("new entity", entity);
     return this.afs.collection('campaigns').doc(campaignId).collection('entities').add(entity);
   }
+
   deleteEntity(entityId:string){
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).delete();
   }
@@ -98,6 +100,23 @@ export class CampaignService {
       'name':name,
       'updated_at':new Date()
     })
+  }
+
+  addEntityTag(entityId:string , tag:string){
+    console.log("Add entity tag", tag);
+    var tagsUpdate = {};
+    tagsUpdate[`tags.${tag}`]=true;
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update(
+      tagsUpdate
+    )
+  }
+  removeEntityTag(entityId:string , tag:string){
+    console.log('removing tag', tag)
+    var tagsUpdate = {};
+    tagsUpdate[`tags.${tag}`]=firebase.firestore.FieldValue.delete();
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update(
+      tagsUpdate
+    )
   }
 
   updateEntityTouched(entityId:string):Promise<void>{

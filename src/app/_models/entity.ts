@@ -3,7 +3,9 @@ export interface Entity {
   created_at:Date;
   updated_at:Date;
   touched_at:Date;
-  type:string;
+  tags:{
+    [key:string]:boolean
+  };
   name:string;
   subtitle?:string;
   description?:string;

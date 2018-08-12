@@ -29,7 +29,34 @@
 
 </mat-card-header>
 <mat-card-content>
-  <mat-chip-list><mat-chip>{{entity.type}}</mat-chip></mat-chip-list>
+
+  <mat-chip-list *ngIf="!editingTags" class="example-full-width">
+    <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable">
+      {{tag}}
+    </mat-chip>
+    <button mat-button (click)="editingTags=true">
+      <mat-icon >edit</mat-icon>
+    </button>
+  </mat-chip-list>
+
+  <mat-form-field  *ngIf="editingTags" class="example-full-width">
+    <mat-label>Add Tag</mat-label>
+    <mat-chip-list #tagList>
+      <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable" [removable]="chipsRemovable" (removed)="removeTag(tag)">
+        {{tag}}
+        <mat-icon matChipRemove *ngIf="chipsRemovable">cancel</mat-icon>
+      </mat-chip>
+      <input [matChipInputFor]="tagList"
+            placeholder="New tag..."
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addTag($event)">
+            <button mat-button (click)="editingTags=false">
+              <mat-icon >cancel</mat-icon>
+            </button>
+    </mat-chip-list>
+
+  </mat-form-field>
+
   <p *ngIf="!editingDesc" (click)="clickEditDesc()">Description: {{entity.description}}</p>
   <ng-container *ngIf="editingDesc">
     <form (ngSubmit)="clickDoneDesc()">
@@ -78,7 +105,6 @@
     <mat-list-item dense *ngFor="let rel of relationshipsOut$|async">
       <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
     </mat-list-item>
-    <mat-divider></mat-divider>
     <mat-list-item dense *ngFor="let rel of relationshipsIn$|async">
       <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
     </mat-list-item>
