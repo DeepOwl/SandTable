@@ -1,8 +1,8 @@
 <mat-card class="example-card">
 <mat-card-header>
   <mat-card-title>
-    <h2 *ngIf="!editingName" (click)="clickEditName()">{{entity.name}}</h2>
-    <ng-container *ngIf="editingName">
+    <h2 *ngIf="editing !='name'" (click)="clickEditName()">{{entity.name}}</h2>
+    <ng-container *ngIf="editing == 'name'">
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput [(ngModel)]="entity.name" (keyup.enter)="clickDoneName()">
@@ -14,9 +14,9 @@
 
     </mat-card-title>
   <mat-card-subtitle>
-    <div *ngIf="!editingSubtitle" (click)="clickEditSubtitle()">{{entity.subtitle}}</div>
-    <div *ngIf="!editingSubtitle && !entity.subtitle" (click)="clickEditSubtitle()">click to add subtitle</div>
-    <ng-container *ngIf="editingSubtitle">
+    <div *ngIf="editing != 'subtitle'" (click)="clickEditSubtitle()">{{entity.subtitle}}</div>
+    <div *ngIf="editing != 'subtitle' && !entity.subtitle" (click)="clickEditSubtitle()">click to add subtitle</div>
+    <ng-container *ngIf="editing == 'subtitle'">
       <mat-form-field>
         <mat-label>Subtitle</mat-label>
         <input matInput [(ngModel)]="entity.subtitle" (keyup.enter)="clickDoneSubtitle()">
@@ -30,16 +30,16 @@
 </mat-card-header>
 <mat-card-content>
 
-  <mat-chip-list *ngIf="!editingTags" class="example-full-width">
+  <mat-chip-list *ngIf="editing != 'tags'" class="example-full-width">
     <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable">
       {{tag}}
     </mat-chip>
-    <button mat-button (click)="editingTags=true">
+    <button mat-button (click)="editing = 'tags'">
       <mat-icon >edit</mat-icon>
     </button>
   </mat-chip-list>
 
-  <mat-form-field  *ngIf="editingTags" class="example-full-width">
+  <mat-form-field  *ngIf="editing == 'tags'" class="example-full-width">
     <mat-label>Add Tag</mat-label>
     <mat-chip-list #tagList>
       <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable" [removable]="chipsRemovable" (removed)="removeTag(tag)">
@@ -50,15 +50,15 @@
             placeholder="New tag..."
             [matChipInputAddOnBlur]="true"
             (matChipInputTokenEnd)="addTag($event)">
-            <button mat-button (click)="editingTags=false">
+            <button mat-button (click)="editing = 'none'">
               <mat-icon >cancel</mat-icon>
             </button>
     </mat-chip-list>
 
   </mat-form-field>
 
-  <p *ngIf="!editingDesc" (click)="clickEditDesc()">Description: {{entity.description}}</p>
-  <ng-container *ngIf="editingDesc">
+  <p *ngIf="editing != 'description'" (click)="clickEditDesc()">Description: {{entity.description}}</p>
+  <ng-container *ngIf="editing == 'description'">
     <form (ngSubmit)="clickDoneDesc()">
     <mat-form-field class="example-full-width">
       <mat-label>Description</mat-label>
@@ -71,11 +71,11 @@
   </ng-container>
 
   <h4>Relationships
-    <button *ngIf="!addingRelationship" mat-icon-button (click)="addingRelationship=true"><mat-icon>add</mat-icon></button>
-    <button *ngIf="addingRelationship" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
+    <button *ngIf="editing != 'relationships'" mat-icon-button (click)="editing = 'relationships'"><mat-icon>add</mat-icon></button>
+    <button *ngIf="editing == 'relationships'" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
   </h4>
 
-    <form *ngIf="addingRelationship">
+    <form *ngIf="editing == 'relationships'">
       {{entity.name}}
       <mat-form-field>
         <mat-label>Relationship</mat-label>

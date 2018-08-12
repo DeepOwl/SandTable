@@ -26,11 +26,7 @@ export class EntityComponent implements OnInit {
   filteredRelationships: Observable<any[]>;
   relationshipCtrl:FormControl;
   relationshipEntity:Entity;
-  editingName:boolean = false;
-  editingDesc:boolean = false;
-  editingSubtitle:boolean = false;
-  addingRelationship:boolean = false;
-  editingTags:boolean = false;
+  editing:string;
   availableRelationships = ["knows", "owns", "is a member of"]
   tagEdit:string;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -123,10 +119,10 @@ export class EntityComponent implements OnInit {
   }
 
   closeCreateRelationship(){
-    this.addingRelationship = false;
-        this.entityCtrl.reset();
-        this.relationshipCtrl.reset();
-        this.relationshipEntity = null
+    this.editing = 'none';
+    this.entityCtrl.reset();
+    this.relationshipCtrl.reset();
+    this.relationshipEntity = null
   }
 
   generateKeys(obj){
@@ -134,7 +130,7 @@ export class EntityComponent implements OnInit {
   }
 
   clickDoneName(){
-    this.editingName = false;
+    this.editing = 'none';
     this._campaign.updateEntityName(this.entity.id, this.entity.name);
 
   }
@@ -159,30 +155,24 @@ removeTag(tag:string):void{
 }
 
   clickEditName(){
-    this.editingName = true;
-    this.editingSubtitle = false;
-    this.editingDesc = false;
+    this.editing = 'name';
   }
   clickDoneSubtitle(){
-    this.editingSubtitle = false;
+    this.editing='none'
     this._campaign.updateEntitySubtitle(this.entity.id, this.entity.subtitle);
   }
 
   clickEditSubtitle(){
-    this.editingSubtitle = true;
-    this.editingName = false;
-    this.editingDesc = false;
+    this.editing = 'subtitle';
   }
 
   clickDoneDesc(){
-    this.editingDesc = false;
+    this.editing = 'none';
     this._campaign.updateEntityDescription(this.entity.id, this.entity.description);
   }
 
   clickEditDesc(){
-    this.editingDesc = true;
-    this.editingName = false;
-    this.editingSubtitle = false;
+    this.editing = 'description';
   }
 
 }
