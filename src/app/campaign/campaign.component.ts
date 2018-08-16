@@ -105,6 +105,11 @@ export class CampaignComponent implements OnInit {
 
   }
 
+  linkEntity(e:Entity){
+    console.log("Linking entity!", e);
+    this._campaign.addRelationship(this.entity, "relates to", e);
+  }
+
 
 
 }

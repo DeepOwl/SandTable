@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 import { CampaignService } from '../_services/campaign.service';
+import { Campaign } from '../_models/campaign'
+import { AuthService } from '../core/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-new-campaign',
@@ -10,13 +13,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class NewCampaignComponent implements OnInit {
   campaignForm: FormGroup;
-  constructor(private _campaign: CampaignService, private fb: FormBuilder, private router:Router) {
+  user:any;
+  constructor(private _campaign: CampaignService, private fb: FormBuilder, private router:Router, private auth:AuthService) {
     this.campaignForm = fb.group({
       name: [null, Validators.required],
       description: [null, Validators.required]
     }) }
 
   ngOnInit() {
+    this.auth.user.subscribe(
+      (user) => {this.user = user}
+    );
   }
 
   rebuildForm() {
@@ -25,11 +32,15 @@ export class NewCampaignComponent implements OnInit {
 
   onFormSubmit(){
     const formModel = this.campaignForm.value;
-    const campaign:any = {
+    var roles = {}
+    roles[this.user.uid] = 'owner';
+    const campaign:Campaign = {
       name:formModel.name as string,
       created_at:new Date(),
       updated_at:new Date(),
       touched_at:new Date(),
+      roles,
+      invite:uuid(),
       description:formModel.description as string
     };
 

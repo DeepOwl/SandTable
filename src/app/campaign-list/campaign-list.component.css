@@ -1,3 +1,17 @@
 .example-card {
   margin:1vh;
 }
+.invite-code-input {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+.example-full-width {
+  width: 100%;
+}
+
+.floating-fab{
+  position: fixed;
+  bottom:20px;
+  right:20px;
+}

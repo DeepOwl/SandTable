@@ -30,6 +30,10 @@ import { EntityComponent } from './campaign/entity/entity.component';
 import { EntityMiniComponent } from './campaign/entity-mini/entity-mini.component';
 import { RelationshipComponent, DialogOverviewRelationshipDialog } from './campaign/relationship/relationship.component';
 import { NewCampaignComponent } from './new-campaign/new-campaign.component';
+import { LoginComponent } from './login/login.component';
+
+import { CoreModule } from './core/core.module';
+import { CampaignListItemComponent } from './campaign-list/campaign-list-item/campaign-list-item.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,9 @@ import { NewCampaignComponent } from './new-campaign/new-campaign.component';
     EntityComponent,
     EntityMiniComponent,
     RelationshipComponent,DialogOverviewRelationshipDialog,
-    NewCampaignComponent
+    NewCampaignComponent,
+    LoginComponent,
+    CampaignListItemComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
@@ -48,6 +54,7 @@ import { NewCampaignComponent } from './new-campaign/new-campaign.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    CoreModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatToolbarModule,MatListModule,
     MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule,
     MatAutocompleteModule, MatSidenavModule, MatSelectModule, MatChipsModule, MatDialogModule

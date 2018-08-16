@@ -1,14 +1,49 @@
-<div >
+<div style="margin:2vh;">
+  <mat-card class="example-card">
+    <mat-form-field class="invite-code-input">
+      <mat-label>Friend Code</mat-label>
+      <input matInput [(ngModel)]="inviteCode" placeholder="Enter a friend code">
+    </mat-form-field>
+    <div *ngIf="inviteCampaign">
+      {{inviteCampaign.name}}
+      {{inviteCampaign.description}}
+    </div>
+
+    <mat-card-actions>
+      <button [disabled]="!inviteCode" mat-raised-button color="primary" (click)="getCampaign()" mat-button>LOOKUP</button>
+      <button [disabled]="!inviteCampaign" mat-raised-button color="primary" (click)="joinCampaign()" mat-button>JOIN</button>
+    </mat-card-actions>
+  </mat-card>
+  <h3>My Campaigns</h3>
   <mat-card class="example-card" *ngFor="let campaign of campaigns | async">
     <mat-card-header>
-      <mat-card-title>{{campaign.name}}</mat-card-title>
+      <mat-card-title><h3>{{campaign.name}}</h3></mat-card-title>
       <mat-card-subtitle>{{campaign.description}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-
+      <div *ngIf="showInvite">
+        Invite Code: {{campaign.invite}}
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" routerLink='/campaign/{{campaign.id}}'mat-button>EMBARK</button>
+      <button mat-raised-button color="primary" mat-button (click)="showInviteCode()">INVITE</button>
     </mat-card-actions>
-  </mat-card>
+</mat-card>
+  <h2>Friends' Campaigns</h2>
+    <mat-card class="example-card" *ngFor="let campaign of campaignsGuest | async">
+      <mat-card-header>
+        <mat-card-title>{{campaign.name}}</mat-card-title>
+        <mat-card-subtitle>{{campaign.description}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink='/campaign/{{campaign.id}}'mat-button>EMBARK</button>
+      </mat-card-actions>
+    </mat-card>
 </div>
+<button routerLink="/campaigns/new" class="floating-fab" mat-fab>
+  <mat-icon>add</mat-icon>
+</button>

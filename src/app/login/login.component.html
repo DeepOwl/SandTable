@@ -1,0 +1,25 @@
+<mat-card class="example-card">
+  {{auth.user | async | json}}
+<div *ngIf="!(auth.user | async); else alreadyLoggedIn">
+
+  <h3>Social Login</h3>
+
+    <button mat-raised-button color="primary" (click)="signInWithGoogle()" class="button btn-social btn-google">
+      <i class="fa fa-google fa-lg"></i> Connect Google
+    </button>
+
+
+    <hr>
+
+
+    <!--<user-form></user-form>-->
+
+</div>
+
+<ng-template #alreadyLoggedIn>
+  <p class="text-success">
+    Already logged in!
+  </p>
+  <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+</ng-template>
+</mat-card>

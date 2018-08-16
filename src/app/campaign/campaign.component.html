@@ -8,7 +8,7 @@
 
       <div  *ngFor="let e of entities | async">
         <div *ngIf="filterEntityList(e)">
-          <app-entity-mini  routerLink='/campaign/{{campaignId}}/{{e.id}}' [entity]='e'></app-entity-mini>
+          <app-entity-mini  routerLink='/campaign/{{campaignId}}/{{e.id}}' [entity]='e' (link)="linkEntity(e)"></app-entity-mini>
           <mat-divider></mat-divider>
         </div>
       </div>

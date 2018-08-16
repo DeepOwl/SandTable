@@ -4,3 +4,7 @@ body{
   margin:0;
   padding-top:64px;
 }
+
+.example-card {
+  margin:1vh;
+}

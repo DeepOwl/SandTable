@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { Entity } from '../_models/entity'
 import { Campaign, CampaignId } from '../_models/campaign'
 import {Subject} from 'rxjs/Subject';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
+import {AuthService } from '../core/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +16,10 @@ export class CampaignService {
   entityChanged$ = this.entitySubject.asObservable();
   private sidenavSubject = new Subject<boolean>();
   sidnavToggle$ = this.sidenavSubject.asObservable();
-  constructor(private afs: AngularFirestore) { }
+  private user;
+  constructor(private afs: AngularFirestore, private auth: AuthService) {
+    auth.user.subscribe(user=>{this.user=user});
+  }
   entityId:string;
   campaignId:string;
   getEntities():Observable<any>{
@@ -33,6 +37,7 @@ export class CampaignService {
   }
 
   getEntity(entityId:string):Observable<Entity>{
+
      return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc<Entity>(entityId).snapshotChanges().pipe(
        map(a => {
          console.log(a);
@@ -47,7 +52,18 @@ export class CampaignService {
   }
 
   getCampaignList(){
-    this.campaignCollection = this.afs.collection<Campaign>('campaigns');
+    this.campaignCollection = this.afs.collection<Campaign>('campaigns', ref=>ref.where(`roles.${this.user.uid}`, '==', 'owner'));
+    return this.campaignCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Campaign;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  getCampaignListGuest(){
+    this.campaignCollection = this.afs.collection<Campaign>('campaigns', ref=>ref.where(`roles.${this.user.uid}`, '==', 'guest'));
     return this.campaignCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Campaign;
@@ -76,6 +92,27 @@ export class CampaignService {
     this.entityId = id;
     this.entitySubject.next(id);
   }
+
+
+    getCampaignByInviteCode(code:string){
+
+      console.log(code);
+      var campaignRef = this.afs.collection<Campaign>('campaigns', ref=>ref.where('invite', '==', code).limit(1));
+      return campaignRef.snapshotChanges().pipe(
+        mergeMap(actions=>actions.map(a=>{
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      )
+        
+    }
+
+    joinCampaignByInviteCode(code:string, campaignId:string){
+      var updateObj = {}
+      updateObj[`roles.${this.user.uid}`]='guest'
+      return this.afs.collection('campaigns').doc(campaignId).update(updateObj);
+    }
 
   addRelationship(srcEntity: Entity, relationship:string, destEntity:Entity){
     var newRelationship = {src:srcEntity.id, relationship:relationship, dest:destEntity.id }
