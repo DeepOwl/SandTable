@@ -25,7 +25,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppNavbarComponent } from './app-navbar/app-navbar.component';
 import { CampaignComponent } from './campaign/campaign.component';
-import { CampaignListComponent } from './campaign-list/campaign-list.component';
+import { CampaignListComponent, InviteDialog } from './campaign-list/campaign-list.component';
 import { EntityComponent } from './campaign/entity/entity.component';
 import { EntityMiniComponent } from './campaign/entity-mini/entity-mini.component';
 import { RelationshipComponent, DialogOverviewRelationshipDialog } from './campaign/relationship/relationship.component';
@@ -46,7 +46,7 @@ import { CampaignListItemComponent } from './campaign-list/campaign-list-item/ca
     RelationshipComponent,DialogOverviewRelationshipDialog,
     NewCampaignComponent,
     LoginComponent,
-    CampaignListItemComponent
+    CampaignListItemComponent, InviteDialog
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
@@ -61,6 +61,6 @@ import { CampaignListItemComponent } from './campaign-list/campaign-list-item/ca
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[DialogOverviewRelationshipDialog]
+  entryComponents:[DialogOverviewRelationshipDialog, InviteDialog]
 })
 export class AppModule { }
