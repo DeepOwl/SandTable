@@ -23,8 +23,11 @@ export class CampaignComponent implements OnInit {
   entityForm: FormGroup;
   filterName:string;
   creatingEntity:boolean = false;
-  types:string[] = ["character","group", "location", "item", "objective"];
+  private defaultTags:string[] = ["character","group", "location", "item", "objective"];
+  campaignTags:string[] = [];
   mobileQuery: MediaQueryList;
+  tagsSelect:string[] = [];
+
   private _mobileQueryListener: ()=>void;
   constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder, changeDetectorRef:ChangeDetectorRef, media:MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -45,8 +48,11 @@ export class CampaignComponent implements OnInit {
         this.campaignId = campaignId;
         _campaign.setCampaignId(campaignId);
         this.entities = _campaign.getEntities();
+        this.entities.subscribe(entityList=>{
+          this.buildTagList(entityList);
+        });
         console.log('new campaign id', campaignId);
-      }
+      }1
       if(entityId != this.entityId){
         console.log('new entity id', entityId);
         //this._campaign.updateEntityTouched(entityId);
@@ -97,17 +103,49 @@ export class CampaignComponent implements OnInit {
   }
 
   filterEntityList(e:Entity):boolean{
-    if(!this.filterName) return true;
-    if( e.name.toLowerCase().indexOf(this.filterName.toLowerCase()) >=0 ){
-      return true;
+    var matchesName:boolean = false;
+    var matchesTags:boolean = true;
+    if(!this.filterName){
+       matchesName = true;
+    } else {
+      if( e.name.toLowerCase().indexOf(this.filterName.toLowerCase()) >=0){
+        matchesName = true;
+      }
+    }
+    if(this.tagsSelect === undefined || this.tagsSelect.length == 0){matchesTags = true;}
+      else {
+        matchesTags = this.entityHasATag(e);
+      }
+    return matchesName && matchesTags;
+
+  }
+
+  entityHasATag(e:Entity){
+    if(!e.tags) return false;
+    for(let tag of this.tagsSelect){
+      if(e.tags[tag]) return true;
     }
     return false;
-
   }
 
   linkEntity(e:Entity){
     console.log("Linking entity!", e);
     this._campaign.addRelationship(this.entity, "relates to", e);
+  }
+
+  buildTagList(entityList:Entity[]){
+    //generate list of tags
+    this.campaignTags = this.defaultTags;
+    for(let entity of entityList){
+      console.log(entity.tags);
+      if(entity.tags){
+        for (let tag of Object.keys(entity.tags)){
+          if(entity.tags[tag]){
+            this.campaignTags.push(tag);
+          }
+        }
+      }
+    }
   }
 
 
