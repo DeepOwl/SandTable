@@ -6,7 +6,7 @@ import { CampaignService } from '../_services/campaign.service';
   styleUrls: ['./app-navbar.component.css']
 })
 export class AppNavbarComponent implements OnInit {
-  title:string  = "SandTable"
+  title:string  = "Thready"
   constructor(private _campaign:CampaignService) { }
 
   ngOnInit() {

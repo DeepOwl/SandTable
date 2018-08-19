@@ -14,7 +14,7 @@
       <button [disabled]="!inviteCampaign" mat-raised-button color="primary" (click)="joinCampaign()" mat-button>JOIN</button>
     </mat-card-actions>
   </mat-card>
-  <h3>My Campaigns</h3>
+  <h2>My Thread Boards</h2>
   <mat-card class="example-card" *ngFor="let campaign of campaigns | async">
     <mat-card-header>
       <mat-card-title><h3>{{campaign.name}}</h3></mat-card-title>
@@ -30,7 +30,7 @@
       <button mat-raised-button color="primary" mat-button (click)="showInviteCode(campaign)">INVITE</button>
     </mat-card-actions>
 </mat-card>
-  <h2>Friends' Campaigns</h2>
+  <h2>Friends' Thread Boards</h2>
     <mat-card class="example-card" *ngFor="let campaign of campaignsGuest | async">
       <mat-card-header>
         <mat-card-title>{{campaign.name}}</mat-card-title>

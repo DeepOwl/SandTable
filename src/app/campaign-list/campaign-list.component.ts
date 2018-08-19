@@ -60,7 +60,7 @@ export class CampaignListComponent implements OnInit {
   selector: 'invite-dialog',
   template: `
   <h1 mat-dialog-title>Invite Code for {{data.campaign.name}}</h1>
-  <p mat-dialog-subtitle>Give this code to people you want to have access</p>
+  <p mat-dialog-subtitle>Give this code to people you want to have access to this board</p>
   <div mat-dialog-content>
   <mat-form-field style='width:100%'>
   <mat-label>Copy this code</mat-label>
