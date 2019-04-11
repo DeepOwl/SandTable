@@ -1,13 +1,22 @@
-<a *ngIf="!isSrc && srcEntity" routerLink='../{{relationship.src}}'>{{srcEntity.name}}</a>
-<ng-container *ngIf="isSrc">{{srcEntity.name}}</ng-container>
-<a *ngIf="!srcEntity" routerLink='../{{relationship.src}}'>{{relationship.src}}</a>
-{{relationship.relationship}}
-<a *ngIf="!isDest && destEntity" routerLink='../{{relationship.dest}}'>{{destEntity.name}}</a>
-<ng-container *ngIf="isDest">{{destEntity.name}}</ng-container>
-<a *ngIf="!destEntity" routerLink='../{{relationship.dest}}'>{{relationship.dest}}</a>
+
+<mat-card   class="relationship-card">
+  <mat-card-header *ngIf="entity" style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
+    <mat-card-title>
+        {{entity.name===destEntity.name?srcEntity.name:destEntity.name}}
+    </mat-card-title>
+    <mat-card-subtitle>
+        {{srcEntity.name}} {{relationship.relationship}} {{destEntity.name}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
+  </mat-card-content>
+
+<mat-card-actions>
 <button mat-icon-button (click)="editRelationship()">
   <mat-icon>edit</mat-icon>
 </button>
 <button mat-icon-button color="warn" (click)="deleteRelationship()">
   <mat-icon>delete</mat-icon>
 </button>
+</mat-card-actions>
+</mat-card>

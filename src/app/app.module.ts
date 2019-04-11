@@ -19,6 +19,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material/dialog'
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -50,6 +51,7 @@ import { CampaignListItemComponent } from './campaign-list/campaign-list-item/ca
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
+    FlexLayoutModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

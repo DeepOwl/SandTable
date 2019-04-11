@@ -137,6 +137,13 @@ export class CampaignService {
     });
   }
 
+  swapRelationship(relationshipId: string, newSrc:string, newDest:string){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').doc(relationshipId).update({
+      'src':newSrc,
+      'dest':newDest
+    });
+  }
+
   updateEntityName(entityId:string, name:string):Promise<void>{
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
       'name':name,

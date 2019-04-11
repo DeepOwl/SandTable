@@ -5,7 +5,7 @@ import { CampaignService }  from '../../_services/campaign.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable, forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
@@ -19,6 +19,7 @@ export class EntityComponent implements OnInit {
   relationshipsIn:any[];
   relationshipsOut:any[];
   relationshipsIn$:Observable<any[]>;
+  relationships$:Observable<any[]>;
   relationshipsOut$:Observable<any[]>;
   //entities:Observable<Entity[]>;
   filteredEntities: Observable<any[]>;
@@ -33,21 +34,9 @@ export class EntityComponent implements OnInit {
   chipsRemovable = true;
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService) {
     console.log("EntityComponent Constructor")
-    //_campaign.getRelationships("src").subscribe(relationships=>this.relationshipsIn = relationships);
-    //_campaign.getRelationships("dest").subscribe(relationships=>this.relationshipsOut = relationships);
+
     _campaign.getEntities().subscribe(entities=>this.entities = entities);
     _campaign.entityChanged$.subscribe(id=>{
-      // console.log("_campaign.entityChanged$ triggered")
-      //   this.relationshipsIn = [];
-      //   this.relationshipsOut = [];
-      //   _campaign.getRelationships("src").subscribe(relationships=>{
-      //     console.log("entity.relationshipsIn changed";
-      //     this.relationshipsIn = relationships
-      //   });
-      //   _campaign.getRelationships("dest").subscribe(relationships=>{
-      //     console.log("entity.relationshipsOut changed";
-      //     this.relationshipsOut = relationships}
-      //   );
     });
 
     this.entityCtrl  = new FormControl();
@@ -72,16 +61,17 @@ export class EntityComponent implements OnInit {
     console.log("entity input changed")
       this.relationshipsIn = [];
       this.relationshipsOut = [];
+      
       this.relationshipsIn$ = this._campaign.getRelationships("src");
       this.relationshipsOut$ = this._campaign.getRelationships("dest");
-      this._campaign.getRelationships("src").subscribe(relationships=>{
-        console.log("entity.relationshipsIn changed");
-        //this.relationshipsIn = relationships
-      });
-      this._campaign.getRelationships("dest").subscribe(relationships=>{
-        console.log("entity.relationshipsOut changed");
-        //this.relationshipsOut = relationships}
-      });
+      // this._campaign.getRelationships("src").subscribe(relationships=>{
+      //   console.log("entity.relationshipsIn changed");
+      //   //this.relationshipsIn = relationships
+      // });
+      // this._campaign.getRelationships("dest").subscribe(relationships=>{
+      //   console.log("entity.relationshipsOut changed");
+      //   //this.relationshipsOut = relationships}
+      // });
   }
   changedRelationshipEntity(event, entity:Entity){
     console.log('changedRelationshipEntity', event);

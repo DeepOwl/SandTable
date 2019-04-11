@@ -4,3 +4,13 @@
 .example-card {
   margin:1vh;
 }
+
+.add-relationship-card {
+  min-height:120px;
+  max-width:40px;
+}
+
+.new-relationship-card {
+  min-width:300px;
+  min-height:120px;
+}

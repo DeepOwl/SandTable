@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, SimpleChange, Inject} from '@a
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { CampaignService }  from '../../_services/campaign.service'
 import { Entity } from '../../_models/entity'
+import { Relationship } from 'src/app/_models/relationship';
 
 export interface DialogData {
   srcName:string, relationship:string, destName:string
@@ -13,7 +14,7 @@ export interface DialogData {
   styleUrls: ['./relationship.component.css']
 })
 export class RelationshipComponent implements OnInit {
-  @Input() relationship: {id:string, dest:string, relationship:string, src:string};
+  @Input() relationship: Relationship;
   destEntity:Entity;
   srcEntity:Entity;
   @Input() entity;
@@ -60,7 +61,10 @@ export class RelationshipComponent implements OnInit {
       console.log('the dialog was closed');
       //this.relationship.relationship = result;
       if(result){
-        this._campaign.updateRelationship(this.relationship.id, result);
+        if(result.swapped){
+          this._campaign.swapRelationship(this.relationship.id, this.relationship.dest, this.relationship.src)
+        }
+        this._campaign.updateRelationship(this.relationship.id, result.relationship);
       }
     })
   }
@@ -75,17 +79,18 @@ export class RelationshipComponent implements OnInit {
 @Component({
   selector: 'dialog-overview-relationship-dialog',
   template: `
-  <h1 mat-dialog-title> Rename relationship</h1>
+  <h1 mat-dialog-title> Edit relationship</h1>
   <div mat-dialog-content>
-  {{data.srcName}}
+  {{swapped?data.destName:data.srcName}}
     <mat-form-field>
       <input matInput [(ngModel)]="data.relationship">
     </mat-form-field>
-    {{data.destName}}
+    {{swapped?data.srcName:data.destName}}
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="data.relationship" cdkFocusInitial>Ok</button>
+    <button mat-button (click)='swapped = !swapped'>Swap</button>
+    <button mat-button [mat-dialog-close]="{'swapped':swapped, relationship:data.relationship}"cdkFocusInitial>Ok</button>
   </div>
   `
 })
@@ -93,7 +98,10 @@ export class DialogOverviewRelationshipDialog {
   constructor(
     public dialogRef: MatDialogRef<DialogOverviewRelationshipDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
+    swapped = false;
+    onSwapClick():void {
+      this.swapped = true;
+    }
     onNoClick():void {
       this.dialogRef.close();
     }

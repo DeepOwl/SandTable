@@ -69,48 +69,73 @@
   </form>
   </ng-container>
 
-  <h4 style='margin-bottom:0px'>Threads
-    <button *ngIf="editing != 'relationships'" mat-icon-button (click)="editing = 'relationships'"><mat-icon>add</mat-icon></button>
-    <button *ngIf="editing == 'relationships'" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
-  </h4>
 
-    <form *ngIf="editing == 'relationships'">
-      {{entity.name}}
-      <mat-form-field>
-        <mat-label>Relationship</mat-label>
-        <input  matInput [matAutocomplete]="auto2" [formControl]="relationshipCtrl">
-          <button mat-button *ngIf="relationshipCtrl.value" matSuffix mat-icon-button (click)="relationshipCtrl.reset()"><mat-icon>close</mat-icon></button>
-        <mat-autocomplete #auto2="matAutocomplete">
-          <mat-option *ngFor="let r of filteredRelationships | async" [value]="r">
-            {{r}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    <mat-form-field>
-      <mat-label>Other</mat-label>
-      <input  matInput [matAutocomplete]="auto" [formControl]="entityCtrl">
-      <button mat-button *ngIf="entityCtrl.value" matSuffix mat-icon-button (click)="entityCtrl.reset();relationshipEntity=null"><mat-icon>close</mat-icon></button>
-      <mat-autocomplete #auto="matAutocomplete" >
-        <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)="changedRelationshipEntity($event, e)">
-          {{e.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
-      <mat-icon >check</mat-icon>
-    </button>
-  </form>
-  <mat-list dense>
-    <mat-list-item dense *ngFor="let rel of relationshipsOut$|async">
-      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
-    </mat-list-item>
-    <mat-list-item dense *ngFor="let rel of relationshipsIn$|async">
-      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
-    </mat-list-item>
-  </mat-list>
+
 </mat-card-content>
 <mat-card-actions>
     <button (click)="togglePin()" mat-icon-button><mat-icon *ngIf="entity.pin">star</mat-icon><mat-icon *ngIf="!entity.pin">star_border</mat-icon></button>
   <button (click)="deleteEntity()" mat-raised-button color='warn'>DELETE</button>
 </mat-card-actions>
 </mat-card>
+
+
+<div style="width:90%"
+  fxLayout="row wrap"
+  fxLayoutGap="16px grid"
+  fxLayoutAlign="space-around center">
+  <div fxFlex *ngFor="let rel of relationshipsOut$|async">
+      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
+  </div>  
+  <div fxFlex *ngFor="let rel of relationshipsIn$|async">
+      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
+  </div>
+  <div fxFlex >
+    <mat-card  class="new-relationship-card" *ngIf="editing == 'relationships'">
+          <mat-card-header>
+              <mat-card-title>
+                New Thread <button *ngIf="editing == 'relationships'" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
+    
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form >
+                    {{entity.name}}
+                    <mat-form-field>
+                      <mat-label>Relationship</mat-label>
+                      <input  matInput [matAutocomplete]="auto2" [formControl]="relationshipCtrl">
+                        <button mat-button *ngIf="relationshipCtrl.value" matSuffix mat-icon-button (click)="relationshipCtrl.reset()"><mat-icon>close</mat-icon></button>
+                      <mat-autocomplete #auto2="matAutocomplete">
+                        <mat-option *ngFor="let r of filteredRelationships | async" [value]="r">
+                          {{r}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  <mat-form-field>
+      
+                    <input  matInput [matAutocomplete]="auto" placeholder="Other" [formControl]="entityCtrl">
+                    <button mat-button *ngIf="entityCtrl.value" matSuffix mat-icon-button (click)="entityCtrl.reset();relationshipEntity=null"><mat-icon>close</mat-icon></button>
+                    <mat-autocomplete #auto="matAutocomplete" >
+                      <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)="changedRelationshipEntity($event, e)">
+                        {{e.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
+                    <mat-icon >check</mat-icon>
+                  </button>
+                </form>
+            </mat-card-content>
+    </mat-card>
+  </div>
+<div fxFlex *ngIf='editing !== "relationships"'>
+      <mat-card class="add-relationship-card">
+
+
+        <button mat-icon-button color="primary" *ngIf="editing != 'relationships'" (click)="editing = 'relationships'">
+          <mat-icon>add</mat-icon>
+        </button>
+        
+            
+      </mat-card>
+    </div>
+  </div>
