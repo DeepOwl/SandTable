@@ -20,6 +20,12 @@ div.mat-card-header-text {
 
 .edit-hover-class{
 }
+.edit-hover-class a{
+  visibility: hidden;
+}
+.edit-hover-class:hover a{
+  visibility: visible;
+}
 .edit-hover-class button{
   visibility: hidden;
 }

@@ -79,25 +79,27 @@
             </button>
           </mat-chip-list>
         </mat-form-field>
-        <!--
+        
     <div class="edit-hover-class" *ngIf="editing != 'description'" > 
-    <p>Description: {{entity.description}}</p>
-    <button mat-icon-button (click)="clickEditDesc()">
-        <mat-icon>edit</mat-icon>
-      </button>
+  
+    <p class="description" style="white-space: pre-wrap"><span style="cursor:pointer" *ngIf="!entity.description" (click)="clickEditDesc()">Click to add description.</span>
+      {{entity.description}} <a *ngIf="entity.description" [routerLink]="" (click)="clickEditDesc()">edit... </a>
+    </p>
+    
+
     </div>
     <ng-container *ngIf="editing == 'description'">
       <form (ngSubmit)="clickDoneDesc()">
         <mat-form-field class="example-full-width">
           <mat-label>Description</mat-label>
-          <textarea #desc rows="4" name="description" matInput [(ngModel)]="entity.description"></textarea>
+          <textarea #desc rows="4" name="description" matInput [(ngModel)]="entity.description" (blur)="clickDoneDesc()"></textarea>
         </mat-form-field>
         <button mat-button (click)="clickDoneDesc()">
           <mat-icon>check</mat-icon>
         </button>
       </form>
     </ng-container>
--->
+
 
 
 
