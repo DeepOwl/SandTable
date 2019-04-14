@@ -38,18 +38,16 @@ export class RelationshipComponent implements OnInit {
       this.destEntity = this.entity;
       this.isDest=true;
     } else {
-      this._campaign.getEntity(this.relationship.dest).subscribe(e=>{console.log("relationship._campaign.getEntity()");this.destEntity=e});
+      this._campaign.getEntity(this.relationship.dest).subscribe(e=>{this.destEntity=e});
     }
 
     if(this.entity.id == this.relationship.src){
       this.srcEntity = this.entity;
       this.isSrc=true;
     } else {
-      this._campaign.getEntity(this.relationship.src).subscribe(e=>{console.log("relationship._campaign.getEntity()");this.srcEntity=e});
+      this._campaign.getEntity(this.relationship.src).subscribe(e=>{this.srcEntity=e});
     }
-    if(this.isDest && this.isSrc){
-      console.log(this.entity, this.relationship)
-    }
+
   }
 
   editRelationship(){

@@ -53,13 +53,13 @@ export class CampaignComponent implements OnInit {
         });
         //console.log('new campaign id', campaignId);
       }1
-      if(entityId != this.entityId){
+      if(!this.entity || entityId != this.entity.id){
         //console.log('new entity id', entityId);
         //this._campaign.updateEntityTouched(entityId);
-        this.entityId = entityId;
+        //this.entityId = entityId;
         _campaign.setEntityId(entityId);
         _campaign.getEntity(entityId).subscribe(entity => {
-          //console.log("_campaign.getEntity() triggered")
+          console.log("_campaign.getEntity() triggered")
           this.entity = entity;
         });
       }

@@ -23,6 +23,7 @@ export interface DialogData {
 })
 export class EntityComponent implements OnInit {
   @Input() entity:Entity;
+  @Input() entities:Entity[];
   @ViewChild('tags') tagInput:ElementRef;
   @ViewChild('subtitle') subtitleInput:ElementRef;
   @ViewChild('name') nameInput:ElementRef;
@@ -31,7 +32,7 @@ export class EntityComponent implements OnInit {
   @ViewChild('noteInput') noteInput:ElementRef;
   ///@ViewChildren('note') noteInputs:QueryList<ElementRef>;
 
-  entities:Entity[];
+ // entities:Entity[];
   relationshipsIn$:Observable<Relationship[]>;
   relationshipsOut$:Observable<Relationship[]>;
   notes:Note[];
@@ -43,7 +44,7 @@ export class EntityComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   chipsRemovable = true;
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService, public dialog:MatDialog) {
-    _campaign.getEntities().subscribe(entities=>this.entities = entities);
+    //_campaign.getEntities().subscribe(entities=>this.entities = entities);
 
   }
 

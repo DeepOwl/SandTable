@@ -44,7 +44,6 @@ export class CampaignService {
 
      return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc<Entity>(entityId).snapshotChanges().pipe(
        map(a => {
-         console.log(a);
          if(a.payload.exists){
            const data = a.payload.data() as Entity;
            const id = a.payload.id;
@@ -99,8 +98,6 @@ export class CampaignService {
 
 
     getCampaignByInviteCode(code:string){
-
-      console.log(code);
       var campaignRef = this.afs.collection<Campaign>('campaigns', ref=>ref.where('invite', '==', code).limit(1));
       return campaignRef.snapshotChanges().pipe(
         mergeMap(actions=>actions.map(a=>{
@@ -120,12 +117,10 @@ export class CampaignService {
 
   addRelationship(srcEntity: Entity, relationship:string, destEntity:Entity){
     var newRelationship = {src:srcEntity.id, relationship:relationship, dest:destEntity.id }
-    console.log(newRelationship);
     return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').add(newRelationship);
   }
 
   addEntity(entity: Entity){
-    console.log("new entity", entity);
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').add(entity);
   }
 
@@ -180,7 +175,6 @@ export class CampaignService {
   }
 
   addEntityTag(entityId:string , tag:string){
-    console.log("Add entity tag", tag);
     var tagsUpdate = {};
     tagsUpdate[`tags.${tag}`]=true;
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update(
@@ -188,7 +182,6 @@ export class CampaignService {
     )
   }
   removeEntityTag(entityId:string , tag:string){
-    console.log('removing tag', tag)
     var tagsUpdate = {};
     tagsUpdate[`tags.${tag}`]=firebase.firestore.FieldValue.delete();
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update(
@@ -196,7 +189,6 @@ export class CampaignService {
     )
   }
   updateEntityImage(entityId: string, image: string) {
-    console.log("upating image to ", image)
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
       'image':image,
       'updated_at':new Date()
@@ -229,7 +221,6 @@ export class CampaignService {
   }
 
   addCampaign(campaign:Campaign){
-    console.log("new campaign", campaign);
     return this.afs.collection('campaigns').add(campaign);
   }
 
