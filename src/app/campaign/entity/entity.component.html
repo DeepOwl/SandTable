@@ -17,7 +17,7 @@
         </ng-container>
 
       </mat-card-title>
-      <mat-card-subtitle>
+      <mat-card-subtitle style="margin-top:-30px">
         <div  *ngIf="editing != 'subtitle'" class="edit-hover-class">
           <span *ngIf="!entity.subtitle" (click)="clickEditSubtitle()">click to add
                 subtitle</span>
@@ -45,7 +45,7 @@
       </mat-card-subtitle>
     </mat-card-title-group>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content style="margin-top:-20px">
 
     <div fxFill fxLayout="row" fxLayout.lt-md="column">
       <div fxFlex="60">
@@ -107,7 +107,7 @@
 
 
         <h4 style="margin-bottom:0">Notes</h4>
-        <mat-list class="edit-hover-2">
+        <mat-list dense class="edit-hover-2">
           <mat-list-item class="edit-hover-class" *ngFor="let note of notes">
             <mat-icon matListIcon (click)="clickEditNote(note)">note</mat-icon>
             <span *ngIf="!note.editing && note.text">{{note.text}}</span>
@@ -129,12 +129,12 @@
             </ng-container>
           </mat-list-item>
           <mat-list-item style="cursor:pointer" (click)="addNote()">
-            Add new note<mat-icon>note_add</mat-icon>
+              <mat-icon matListIcon>note_add</mat-icon>Add new note
           </mat-list-item>
         </mat-list>
       </div>
       <div fxFlex="40" class="edit-hover-class" *ngIf="editing != 'image'" (click)="clickEditImage()">
-        <img *ngIf="entity.image" style="max-width:100%" src="{{entity.image}}" alt="click to edit image">
+        <img *ngIf="entity.image" style="margin-top:-40px; max-width:100%" src="{{entity.image}}" alt="click to edit image">
         <span *ngIf="!entity.image">Click to add image URL</span>
         <button mat-icon-button>
           <mat-icon>edit</mat-icon>
@@ -143,7 +143,7 @@
       <ng-container *ngIf="editing == 'image'">
         <mat-form-field class="example-full-width">
           <mat-label>Image source URL</mat-label>
-          <input #image matInput [(ngModel)]="entity.image">
+          <input #image matInput [(ngModel)]="entity.image" (blur)="clickDoneImage()">
           <button mat-icon-button matSuffix (click)="clickDoneImage()">
               <mat-icon>check</mat-icon>
             </button>
@@ -160,15 +160,13 @@
     <button (click)="deleteEntity()" mat-raised-button color='warn'>DELETE</button>
   </mat-card-actions>
 </mat-card>
-
-
-<div style="width:95%" class="example-card" fxLayout="row wrap" fxLayoutGap="0.5% grid"
-  fxLayoutAlign="space-between center">
-  <div fxFlex *ngFor="let rel of relationshipsOut$|async">
-    <app-relationship [entity]='entity' [relationship]='rel'></app-relationship>
+<div *ngIf="entities" style="width:95%" class="example-card" fxLayout="row wrap" fxLayoutGap="0.5% grid"
+  fxLayoutAlign="start">
+  <div fxFlex *ngFor="let rel of relationshipsOut">
+    <app-relationship [entity]='entity' [srcEntity]="getEntityById(rel.src)" [destEntity]="getEntityById(rel.dest)" [relationship]='rel'></app-relationship>
   </div>
-  <div fxFlex *ngFor="let rel of relationshipsIn$|async">
-    <app-relationship [entity]='entity' [relationship]='rel'></app-relationship>
+  <div fxFlex *ngFor="let rel of relationshipsIn">
+    <app-relationship [entity]='entity' [srcEntity]="getEntityById(rel.src)" [destEntity]="getEntityById(rel.dest)" [relationship]='rel'></app-relationship>
   </div>
   <div fxFlex *ngIf='editing !== "relationships"'>
     <mat-card class="add-relationship-card" (click)="showCreateRelationship()">

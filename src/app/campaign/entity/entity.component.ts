@@ -33,6 +33,8 @@ export class EntityComponent implements OnInit {
   ///@ViewChildren('note') noteInputs:QueryList<ElementRef>;
 
  // entities:Entity[];
+  relationshipsIn:Relationship[];
+  relationshipsOut:Relationship[];
   relationshipsIn$:Observable<Relationship[]>;
   relationshipsOut$:Observable<Relationship[]>;
   notes:Note[];
@@ -41,6 +43,8 @@ export class EntityComponent implements OnInit {
   availableRelationships = ["knows", "owns", "is a member of"]
   tagEdit:string;
   notesSub:Subscription = new Subscription();
+  relationshipsInSub:Subscription = new Subscription();
+  relationshipsOutSub:Subscription = new Subscription();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   chipsRemovable = true;
   constructor(private router: Router,  private route: ActivatedRoute, private _campaign:CampaignService, public dialog:MatDialog) {
@@ -52,12 +56,22 @@ export class EntityComponent implements OnInit {
   }
   ngOnChanges(changes:SimpleChanges){
     console.log(changes)
-    if(!changes.entity.previousValue || changes.entity.currentValue.id != changes.entity.previousValue.id){   
-      this.relationshipsIn$ = this._campaign.getRelationships("src");
-      this.relationshipsOut$ = this._campaign.getRelationships("dest");
-      this.notesSub.unsubscribe();
-      this.notesSub = this._campaign.getNotes(this.entity).subscribe(notes => this.notes = notes);
-      this._campaign.updateEntityTouched(this.entity);
+    if(changes.entity){
+      if(!changes.entity.previousValue || changes.entity.currentValue.id !== changes.entity.previousValue.id){
+        console.log("new entity", this.entity);
+        //this.relationshipsInSub.unsubscribe();
+        //this.relationshipsOutSub.unsubscribe();
+        this.relationshipsOut = [];
+        this.relationshipsIn = [];
+        console.log(this.relationshipsIn);
+        console.log(this.relationshipsOut);
+        this.relationshipsInSub = this._campaign.getRelationships(this.entity, "src").subscribe(rels=>{console.log(rels);this.relationshipsIn=rels});
+        this.relationshipsOutSub = this._campaign.getRelationships(this.entity, "dest").subscribe(rels=>{console.log(rels);this.relationshipsOut=rels});
+        this.notesSub.unsubscribe();
+        this.notesSub = this._campaign.getNotes(this.entity).subscribe(notes => this.notes = notes);
+        this._campaign.updateEntityTouched(this.entity);
+     }
+
     }
   }
   
@@ -77,6 +91,12 @@ export class EntityComponent implements OnInit {
     this._campaign.updateEntityPin(this.entity.id, this.entity.pin);
   }
   deleteEntity(){
+    for(const rel of this.relationshipsIn){
+      this._campaign.deleteRelationship(rel.id);
+    }
+    for(const rel of this.relationshipsOut){
+      this._campaign.deleteRelationship(rel.id);
+    }
     this._campaign.deleteEntity(this.entity.id);
     this.router.navigate(['../none'], {relativeTo: this.route});
   }
@@ -89,6 +109,10 @@ export class EntityComponent implements OnInit {
   }
   deleteRelationship(relationship){
     this._campaign.deleteRelationship(relationship.id);
+  }
+
+  getEntityById(id:string):Entity{
+    return this.entities.find(e=>e.id===id);
   }
 
 

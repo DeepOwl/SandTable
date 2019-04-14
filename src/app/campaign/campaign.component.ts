@@ -8,6 +8,7 @@ import { EntityComponent } from './entity/entity.component';
 import { EntityMiniComponent } from './entity-mini/entity-mini.component';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 import {MediaMatcher } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-campaign',
@@ -27,6 +28,7 @@ export class CampaignComponent implements OnInit {
   campaignTags:string[] = [];
   mobileQuery: MediaQueryList;
   tagsSelect:string[] = [];
+  entitySubscription = new Subscription();
 
   private _mobileQueryListener: ()=>void;
   constructor(private router: Router, private route: ActivatedRoute, private _campaign: CampaignService, private fb: FormBuilder, changeDetectorRef:ChangeDetectorRef, media:MediaMatcher) {
@@ -58,7 +60,8 @@ export class CampaignComponent implements OnInit {
         //this._campaign.updateEntityTouched(entityId);
         //this.entityId = entityId;
         _campaign.setEntityId(entityId);
-        _campaign.getEntity(entityId).subscribe(entity => {
+        this.entitySubscription.unsubscribe();
+        this.entitySubscription = _campaign.getEntity(entityId).subscribe(entity => {
           console.log("_campaign.getEntity() triggered")
           this.entity = entity;
         });

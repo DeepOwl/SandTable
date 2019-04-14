@@ -1,14 +1,13 @@
-
 <mat-card *ngIf="entity && destEntity && srcEntity"  class="relationship-card edit-hover">
   <mat-card-header  style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
     <mat-card-title>
-        {{entity.name===destEntity.name?srcEntity.name:destEntity.name}}
+        {{isDest?srcEntity.name:destEntity.name}}
     </mat-card-title>
     <mat-card-subtitle>
         {{srcEntity.name}} {{relationship.relationship}} {{destEntity.name}}
     </mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image src="{{entity.name===destEntity.name?srcEntity.image:destEntity.image}}"
+  <img mat-card-image src="{{isDest?srcEntity.image:destEntity.image}}"
   style="cursor:pointer; margin-bottom:0px" 
   routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
   <div class="overlay-buttons show-on-hover">

@@ -77,9 +77,8 @@ export class CampaignService {
     );
   }
 
-  getRelationships(direction:string):Observable<Relationship[]>{
-
-    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection<Relationship>('relationships', ref=>ref.where(direction, '==',this.entityId)).snapshotChanges().pipe(
+  getRelationships(entity:Entity, direction:string):Observable<Relationship[]>{
+    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection<Relationship>('relationships', ref=>ref.where(direction, '==', entity.id)).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
@@ -149,6 +148,10 @@ export class CampaignService {
   }
 
   deleteEntity(entityId:string){
+    //const src = this.afs.collection('campaigns').doc(this.campaignId).collection('relationships', ref => ref.where('src', '==', entityId)).get();
+    //src.forEach().then(a=>a.forEach(doc=>console.log("DELETING REL",doc)))
+    // const dest = this.afs.collection('campaigns').doc(this.campaignId).collection('relationships', ref => ref.where('dest', '==', entityId)).ref.get();
+    this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).collection('notes').ref.get().then(col=>col.docs.forEach(doc=>doc.ref.delete()));
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).delete();
   }
   deleteRelationship(relationshipId:string){

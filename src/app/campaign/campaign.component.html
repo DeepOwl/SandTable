@@ -46,7 +46,7 @@
     <button [disabled]="entityForm.status !== 'VALID'"  mat-raised-button color="accent" >Submit</button>
   </form>
   </mat-card>
-  <app-entity *ngIf='entity && !creatingEntity' [entity]='entity' [entities]='entities'></app-entity>
+  <app-entity *ngIf='entity && !creatingEntity' [entity]='entity' [entities]='entities|async'></app-entity>
   <button (click)="createBlankEntity()" class="floating-fab" mat-fab>
     <mat-icon *ngIf="!creatingEntity">add</mat-icon>
     <mat-icon *ngIf="creatingEntity">close</mat-icon>

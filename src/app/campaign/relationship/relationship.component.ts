@@ -15,39 +15,40 @@ export interface DialogData {
 })
 export class RelationshipComponent implements OnInit {
   @Input() relationship: Relationship;
-  destEntity:Entity;
-  srcEntity:Entity;
-  @Input() entity;
-  isSrc:boolean;
-  isDest:boolean;
+  @Input() destEntity: Entity;
+  @Input() srcEntity: Entity;
+  @Input() entity: Entity;
+  isSrc: boolean;
+  isDest: boolean;
 
   constructor(private _campaign:CampaignService, public dialog:MatDialog) {
 
   }
 
   ngOnInit() {
-
+    console.log("relationship OnChanges")
+    this.isDest=false;
+    this.isSrc=false;
+    if(this.entity.id === this.relationship.dest){
+      //this.destEntity = this.entity;
+      this.isDest=true;
+    } else {
+      this.isSrc=true;
+      //this._campaign.getEntity(this.relationship.dest).subscribe(e=>{this.destEntity=e});
+    }
 
   }
 
   ngOnChanges(changes: SimpleChanges){
-    console.log("relationship OnChanges")
-    this.isDest=false;
-    this.isSrc=false;
-    if(this.entity.id == this.relationship.dest){
-      this.destEntity = this.entity;
-      this.isDest=true;
-    } else {
-      this._campaign.getEntity(this.relationship.dest).subscribe(e=>{this.destEntity=e});
-    }
 
+/*
     if(this.entity.id == this.relationship.src){
       this.srcEntity = this.entity;
       this.isSrc=true;
     } else {
       this._campaign.getEntity(this.relationship.src).subscribe(e=>{this.srcEntity=e});
     }
-
+*/
   }
 
   editRelationship(){
