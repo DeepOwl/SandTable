@@ -43,7 +43,7 @@ export class CampaignComponent implements OnInit {
     route.paramMap.subscribe(params => {
       const campaignId = params.get('campaign');
       const entityId = params.get('entity');
-      console.log(campaignId, entityId);
+      //console.log(campaignId, entityId);
       if(this.campaignId != campaignId){
         this.campaignId = campaignId;
         _campaign.setCampaignId(campaignId);
@@ -51,15 +51,15 @@ export class CampaignComponent implements OnInit {
         this.entities.subscribe(entityList=>{
           this.buildTagList(entityList);
         });
-        console.log('new campaign id', campaignId);
+        //console.log('new campaign id', campaignId);
       }1
       if(entityId != this.entityId){
-        console.log('new entity id', entityId);
+        //console.log('new entity id', entityId);
         //this._campaign.updateEntityTouched(entityId);
         this.entityId = entityId;
         _campaign.setEntityId(entityId);
         _campaign.getEntity(entityId).subscribe(entity => {
-          console.log("_campaign.getEntity() triggered")
+          //console.log("_campaign.getEntity() triggered")
           this.entity = entity;
         });
       }
@@ -91,15 +91,33 @@ export class CampaignComponent implements OnInit {
       tags:tagsObject,
       subtitle:formModel.subtitle as string,
       description:formModel.description as string,
-      pin:false
+      pin:false,
+      image:null
     };
 
-    var ret = this._campaign.addEntity(this.campaignId, entity);
+    var ret = this._campaign.addEntity( entity);
     ret.then(docRef => {
       this.router.navigate(['campaign/'+this.campaignId+'/'+docRef.id]);
     });
     console.log(ret);
     this.rebuildForm();
+  }
+
+  createBlankEntity(){
+    const entity:Entity = {
+      name:"New Thing",
+      created_at:new Date(),
+      updated_at:new Date(),
+      touched_at:new Date(),
+      tags:{},
+      subtitle:"",
+      description:"",
+      pin:false,
+      image:null
+    };
+    this._campaign.addEntity(entity).then(docRef => {
+      this.router.navigate(['campaign/'+this.campaignId+'/'+docRef.id]);
+    });
   }
 
   filterEntityList(e:Entity):boolean{
@@ -137,10 +155,9 @@ export class CampaignComponent implements OnInit {
     //generate list of tags
     this.campaignTags = this.defaultTags;
     for(let entity of entityList){
-      console.log(entity.tags);
       if(entity.tags){
         for (let tag of Object.keys(entity.tags)){
-          if(entity.tags[tag]){
+          if(entity.tags[tag] && this.campaignTags.indexOf(tag) < 0){
             this.campaignTags.push(tag);
           }
         }

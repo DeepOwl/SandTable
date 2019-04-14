@@ -1,5 +1,26 @@
 .relationship-card {
-    min-width:300px;
+    width:250px;
     min-height:120px;
   }
+
+  .relationship-card img {
+  object-fit:cover;
+   max-height:300px
+  }
+
+  .edit-hover .show-on-hover{
+    visibility: hidden;
+  }
+  .edit-hover:hover .show-on-hover{
+    visibility: visible;
+  }
+
+  /* Style the button and place it in the middle of the container/image */
+mat-card .overlay-buttons {
+  position: absolute;
+  bottom: -10%;
+  left: 5%;
+  transform: translate(-5%, -98%);
+  -ms-transform: translate(-5%, -98%);
+}
   

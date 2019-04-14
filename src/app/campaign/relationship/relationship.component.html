@@ -1,6 +1,6 @@
 
-<mat-card   class="relationship-card">
-  <mat-card-header *ngIf="entity" style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
+<mat-card *ngIf="entity && destEntity && srcEntity"  class="relationship-card edit-hover">
+  <mat-card-header  style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
     <mat-card-title>
         {{entity.name===destEntity.name?srcEntity.name:destEntity.name}}
     </mat-card-title>
@@ -8,15 +8,25 @@
         {{srcEntity.name}} {{relationship.relationship}} {{destEntity.name}}
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content style="cursor:pointer" routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
-  </mat-card-content>
-
-<mat-card-actions>
+  <img mat-card-image src="{{entity.name===destEntity.name?srcEntity.image:destEntity.image}}"
+  style="cursor:pointer; margin-bottom:0px" 
+  routerLink='../{{entity.id===relationship.dest?relationship.src:relationship.dest}}'>
+  <div class="overlay-buttons show-on-hover">
+      <button style="margin-right:10px" mat-mini-fab (click)="editRelationship()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" (click)="deleteRelationship()">
+          <mat-icon>delete</mat-icon>
+        </button>
+  </div>
+  
+<!--mat-card-actions class="show-on-hover">
 <button mat-icon-button (click)="editRelationship()">
   <mat-icon>edit</mat-icon>
 </button>
 <button mat-icon-button color="warn" (click)="deleteRelationship()">
   <mat-icon>delete</mat-icon>
 </button>
-</mat-card-actions>
+
+</mat-card-actions-->
 </mat-card>

@@ -7,10 +7,14 @@ import { Campaign, CampaignId } from '../_models/campaign'
 import {Subject} from 'rxjs/Subject';
 import { map, mergeMap } from 'rxjs/operators';
 import {AuthService } from '../core/auth.service';
+import { Relationship } from '../_models/relationship';
+import { Note } from '../_models/note';
+import { User } from 'firebase/app';
 @Injectable({
   providedIn: 'root'
 })
 export class CampaignService {
+
   private campaignCollection: AngularFirestoreCollection<Campaign>;
   private entitySubject = new Subject<string>();
   entityChanged$ = this.entitySubject.asObservable();
@@ -22,10 +26,10 @@ export class CampaignService {
   }
   entityId:string;
   campaignId:string;
-  getEntities():Observable<any>{
+  getEntities():Observable<Entity[]>{
      //return this.afs.collection('campaigns').doc(campaignId).collection('entities').valueChanges();
      //var entityCollection = afs.collection<Campaign>('campaigns');
-     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities', ref=>ref.orderBy("pin", 'desc')).snapshotChanges().pipe(
+     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities', ref=>ref.orderBy("pin", 'desc').orderBy("touched_at", 'desc')).snapshotChanges().pipe(
        map(actions => actions.map(a => {
          const data = a.payload.doc.data() as Entity;
          const id = a.payload.doc.id;
@@ -74,9 +78,9 @@ export class CampaignService {
     );
   }
 
-  getRelationships(direction:string){
+  getRelationships(direction:string):Observable<Relationship[]>{
 
-    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection('relationships', ref=>ref.where(direction, '==',this.entityId)).snapshotChanges().pipe(
+    return this.afs.collection<Campaign>('campaigns').doc(this.campaignId).collection<Relationship>('relationships', ref=>ref.where(direction, '==',this.entityId)).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
@@ -120,9 +124,33 @@ export class CampaignService {
     return this.afs.collection('campaigns').doc(this.campaignId).collection('relationships').add(newRelationship);
   }
 
-  addEntity(campaignId:string, entity: Entity){
+  addEntity(entity: Entity){
     console.log("new entity", entity);
-    return this.afs.collection('campaigns').doc(campaignId).collection('entities').add(entity);
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').add(entity);
+  }
+
+  getNotes(entity:Entity):Observable<Note[]>{
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entity.id).collection<Note>('notes',
+      ref => ref.orderBy('created_at')).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+  addNote(entity:Entity){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entity.id).collection('notes')
+      .add({'user':this.user.uid, text:'', created_at:Date.now()});
+  }
+
+  updateNote(entity:Entity, note:Note){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entity.id).collection('notes').doc(note.id)
+      .update({'text':note.text});
+  }
+  deleteNote(entity:Entity, note:Note){
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entity.id).collection('notes').doc(note.id)
+      .delete();
   }
 
   deleteEntity(entityId:string){
@@ -167,9 +195,16 @@ export class CampaignService {
       tagsUpdate
     )
   }
-
-  updateEntityTouched(entityId:string):Promise<void>{
+  updateEntityImage(entityId: string, image: string) {
+    console.log("upating image to ", image)
     return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entityId).update({
+      'image':image,
+      'updated_at':new Date()
+    });
+  }
+
+  updateEntityTouched(entity:Entity):Promise<void>{
+    return this.afs.collection('campaigns').doc(this.campaignId).collection('entities').doc(entity.id).update({
       'touched_at':new Date()
     })
   }

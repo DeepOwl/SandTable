@@ -5,12 +5,35 @@
   margin:1vh;
 }
 
+div.mat-card-header-text {
+  margin:0px;
+}
 .add-relationship-card {
-  min-height:120px;
-  max-width:40px;
+  height:200px;
+  width:80px;
+  cursor:pointer;
 }
 
 .new-relationship-card {
-  min-width:300px;
-  min-height:120px;
+  height:120px;
 }
+
+.edit-hover-class{
+}
+.edit-hover-class button{
+  visibility: hidden;
+}
+.edit-hover-class:hover button{
+  visibility: visible;
+}
+.edit-hover-2 .show-on-hover{
+  visibility: hidden;
+}
+.edit-hover-2:hover .show-on-hover{
+  visibility: visible;
+}
+
+.big-icon {
+  font-size: 72px;
+}
+

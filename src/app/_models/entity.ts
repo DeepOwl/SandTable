@@ -11,4 +11,5 @@ export interface Entity {
   description?:string;
   relationships?:any[];
   pin:boolean;
+  image:string;
 }

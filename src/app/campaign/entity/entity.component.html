@@ -1,141 +1,184 @@
-<mat-card class="example-card">
-<mat-card-header>
-  <mat-card-title>
-    <h2 *ngIf="editing !='name'" (click)="clickEditName()">{{entity.name}}</h2>
-    <ng-container *ngIf="editing == 'name'">
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="entity.name" (keyup.enter)="clickDoneName()">
-      </mat-form-field>
-      <button mat-button (click)="clickDoneName()">
-        <mat-icon >check</mat-icon>
-      </button>
-    </ng-container>
+<mat-card class="example-card" (click)="clickCard($event)">
+  <mat-card-header>
+    <mat-card-title-group style="margin-left:-30px;">
+      <mat-card-title>
+        <span class="edit-hover-class" *ngIf="editing !='name'" (click)="clickEditName()">{{entity.name}}
+          <button mat-icon-button (click)="clickEditName()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </span>
+        <ng-container *ngIf="editing == 'name'">
+          <mat-form-field>
+            <input matInput #name [(ngModel)]="entity.name" (keyup.enter)="clickDoneName()" (blur)="clickDoneName()">
+          </mat-form-field>
+          <button mat-icon-button (click)="clickDoneName()">
+            <mat-icon>check</mat-icon>
+          </button>
+        </ng-container>
 
-    </mat-card-title>
-  <mat-card-subtitle>
-    <div *ngIf="editing != 'subtitle'" (click)="clickEditSubtitle()">{{entity.subtitle}}</div>
-    <div *ngIf="editing != 'subtitle' && !entity.subtitle" (click)="clickEditSubtitle()">click to add subtitle</div>
-    <ng-container *ngIf="editing == 'subtitle'">
-      <mat-form-field>
-        <mat-label>Subtitle</mat-label>
-        <input matInput [(ngModel)]="entity.subtitle" (keyup.enter)="clickDoneSubtitle()">
-      </mat-form-field>
-      <button mat-button (click)="clickDoneSubtitle()">
-        <mat-icon >check</mat-icon>
-      </button>
-    </ng-container>
-    </mat-card-subtitle>
-
-</mat-card-header>
-<mat-card-content>
-  <mat-chip-list *ngIf="editing != 'tags'" class="example-full-width">
-    <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable">
-      {{tag}}
-    </mat-chip>
-    <button mat-button (click)="editing = 'tags'">
-      <mat-icon >edit</mat-icon>
-    </button>
-  </mat-chip-list>
-
-  <mat-form-field  *ngIf="editing == 'tags'" class="example-full-width">
-    <mat-label>Edit tags</mat-label>
-    <mat-chip-list #tagList>
-      <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable" [removable]="chipsRemovable" (removed)="removeTag(tag)">
-        {{tag}}
-        <mat-icon matChipRemove *ngIf="chipsRemovable">cancel</mat-icon>
-      </mat-chip>
-      <input [matChipInputFor]="tagList"
-            placeholder="New tag..."
-            [matChipInputAddOnBlur]="true"
-            (matChipInputTokenEnd)="addTag($event)">
-            <button mat-button (click)="editing = 'none'">
-              <mat-icon >cancel</mat-icon>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div  *ngIf="editing != 'subtitle'" class="edit-hover-class">
+          <span *ngIf="!entity.subtitle" (click)="clickEditSubtitle()">click to add
+                subtitle</span>
+          <span  (click)="clickEditSubtitle()">{{entity.subtitle}}
+            </span>
+            <button mat-icon-button (click)="clickEditSubtitle()">
+              <mat-icon>    
+                edit
+              </mat-icon>
             </button>
-    </mat-chip-list>
 
-  </mat-form-field>
+        </div>
 
-  <p *ngIf="editing != 'description'" (click)="clickEditDesc()">Description: {{entity.description}}</p>
-  <ng-container *ngIf="editing == 'description'">
-    <form (ngSubmit)="clickDoneDesc()">
-    <mat-form-field class="example-full-width">
-      <mat-label>Description</mat-label>
-      <textarea rows="4" name="description" matInput [(ngModel)]="entity.description"></textarea>
-    </mat-form-field>
-    <button mat-button (click)="clickDoneDesc()">
-      <mat-icon >check</mat-icon>
+        
+        <ng-container *ngIf="editing == 'subtitle'">
+          <mat-form-field>
+            <mat-label>Subtitle</mat-label>
+            <input matInput #subtitle [(ngModel)]="entity.subtitle" (keyup.enter)="clickDoneSubtitle()"
+              (blur)="clickDoneSubtitle()">
+          </mat-form-field>
+          <button mat-button (click)="clickDoneSubtitle()">
+            <mat-icon>check</mat-icon>
+          </button>
+        </ng-container>
+      </mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+
+    <div fxFill fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="60">
+        <div *ngIf="editing != 'tags'"  class="edit-hover-class example-full-width">
+          <span *ngIf="countTags(entity) < 1">Add tags...           
+            <button mat-icon-button (click)="clickEditTags()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </span>
+          <mat-chip-list *ngIf="countTags(entity) > 0" >
+            <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable">
+              {{tag}}
+            </mat-chip>
+            <button mat-icon-button (click)="clickEditTags()">
+                <mat-icon>edit</mat-icon>
+            </button>
+          </mat-chip-list>
+        </div>
+        <mat-form-field *ngIf="editing == 'tags'" class="example-full-width" >
+          <mat-label>Edit tags</mat-label>
+          <mat-chip-list #tagList>
+            <mat-chip *ngFor="let tag of generateKeys(entity.tags)" [selectable]="selectable"
+              [removable]="chipsRemovable" (removed)="removeTag(tag)">
+              {{tag}}
+              <mat-icon matChipRemove *ngIf="chipsRemovable">cancel</mat-icon>
+            </mat-chip>
+            <input #tags [matChipInputFor]="tagList" placeholder="New tag..." [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addTag($event)" (blur)="editing = 'none'">
+            <button mat-icon-button (click)="editing = 'none'">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-list>
+        </mat-form-field>
+        <!--
+    <div class="edit-hover-class" *ngIf="editing != 'description'" > 
+    <p>Description: {{entity.description}}</p>
+    <button mat-icon-button (click)="clickEditDesc()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-container *ngIf="editing == 'description'">
+      <form (ngSubmit)="clickDoneDesc()">
+        <mat-form-field class="example-full-width">
+          <mat-label>Description</mat-label>
+          <textarea #desc rows="4" name="description" matInput [(ngModel)]="entity.description"></textarea>
+        </mat-form-field>
+        <button mat-button (click)="clickDoneDesc()">
+          <mat-icon>check</mat-icon>
+        </button>
+      </form>
+    </ng-container>
+-->
+
+
+
+
+
+
+        <h4 style="margin-bottom:0">Notes</h4>
+        <mat-list class="edit-hover-2">
+          <mat-list-item class="edit-hover-class" *ngFor="let note of notes">
+            <mat-icon matListIcon (click)="clickEditNote(note)">note</mat-icon>
+            <span *ngIf="!note.editing && note.text">{{note.text}}</span>
+            <span style="color:gray" *ngIf="!note.editing && !note.text">Empty note</span>
+            <mat-form-field style="width:100%" *ngIf="note.editing">
+              <input matInput #noteInput placeholder="type a note" [(ngModel)]="note.text"
+                (keyup.enter)="clickDoneNote(note)" (blur)="clickDoneNote(note)">
+              <button mat-icon-button matSuffix (click)="clickDoneNote(note)">
+                <mat-icon>check</mat-icon>
+              </button>
+            </mat-form-field>
+            <ng-container *ngIf="!note.editing">
+              <button mat-icon-button (click)="clickEditNote(note)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="clickDeleteNote(note)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-container>
+          </mat-list-item>
+          <mat-list-item style="cursor:pointer" (click)="addNote()">
+            Add new note<mat-icon>note_add</mat-icon>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div fxFlex="40" class="edit-hover-class" *ngIf="editing != 'image'" (click)="clickEditImage()">
+        <img *ngIf="entity.image" style="max-width:100%" src="{{entity.image}}" alt="click to edit image">
+        <span *ngIf="!entity.image">Click to add image URL</span>
+        <button mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <ng-container *ngIf="editing == 'image'">
+        <mat-form-field class="example-full-width">
+          <mat-label>Image source URL</mat-label>
+          <input #image matInput [(ngModel)]="entity.image">
+          <button mat-icon-button matSuffix (click)="clickDoneImage()">
+              <mat-icon>check</mat-icon>
+            </button>
+        </mat-form-field>
+
+      </ng-container>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="togglePin()" mat-icon-button>
+      <mat-icon *ngIf="entity.pin">star</mat-icon>
+      <mat-icon *ngIf="!entity.pin">star_border</mat-icon>
     </button>
-  </form>
-  </ng-container>
-
-
-
-</mat-card-content>
-<mat-card-actions>
-    <button (click)="togglePin()" mat-icon-button><mat-icon *ngIf="entity.pin">star</mat-icon><mat-icon *ngIf="!entity.pin">star_border</mat-icon></button>
-  <button (click)="deleteEntity()" mat-raised-button color='warn'>DELETE</button>
-</mat-card-actions>
+    <button (click)="deleteEntity()" mat-raised-button color='warn'>DELETE</button>
+  </mat-card-actions>
 </mat-card>
 
 
-<div style="width:90%"
-  fxLayout="row wrap"
-  fxLayoutGap="16px grid"
-  fxLayoutAlign="space-around center">
+<div style="width:95%" class="example-card" fxLayout="row wrap" fxLayoutGap="0.5% grid"
+  fxLayoutAlign="space-between center">
   <div fxFlex *ngFor="let rel of relationshipsOut$|async">
-      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
-  </div>  
-  <div fxFlex *ngFor="let rel of relationshipsIn$|async">
-      <app-relationship [entity]='entity'  [relationship]='rel'></app-relationship>
+    <app-relationship [entity]='entity' [relationship]='rel'></app-relationship>
   </div>
-  <div fxFlex >
-    <mat-card  class="new-relationship-card" *ngIf="editing == 'relationships'">
-          <mat-card-header>
-              <mat-card-title>
-                New Thread <button *ngIf="editing == 'relationships'" mat-icon-button color="default" (click)="closeCreateRelationship()"><mat-icon>clear</mat-icon></button>
-    
-                </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <form >
-                    {{entity.name}}
-                    <mat-form-field>
-                      <mat-label>Relationship</mat-label>
-                      <input  matInput [matAutocomplete]="auto2" [formControl]="relationshipCtrl">
-                        <button mat-button *ngIf="relationshipCtrl.value" matSuffix mat-icon-button (click)="relationshipCtrl.reset()"><mat-icon>close</mat-icon></button>
-                      <mat-autocomplete #auto2="matAutocomplete">
-                        <mat-option *ngFor="let r of filteredRelationships | async" [value]="r">
-                          {{r}}
-                        </mat-option>
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  <mat-form-field>
-      
-                    <input  matInput [matAutocomplete]="auto" placeholder="Other" [formControl]="entityCtrl">
-                    <button mat-button *ngIf="entityCtrl.value" matSuffix mat-icon-button (click)="entityCtrl.reset();relationshipEntity=null"><mat-icon>close</mat-icon></button>
-                    <mat-autocomplete #auto="matAutocomplete" >
-                      <mat-option *ngFor="let e of filteredEntities | async" [value]="e.name" (onSelectionChange)="changedRelationshipEntity($event, e)">
-                        {{e.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                  <button [disabled]="!(relationshipEntity && relationshipCtrl.value)"mat-icon-button (click)="createRelationship()">
-                    <mat-icon >check</mat-icon>
-                  </button>
-                </form>
-            </mat-card-content>
+  <div fxFlex *ngFor="let rel of relationshipsIn$|async">
+    <app-relationship [entity]='entity' [relationship]='rel'></app-relationship>
+  </div>
+  <div fxFlex *ngIf='editing !== "relationships"'>
+    <mat-card class="add-relationship-card" (click)="showCreateRelationship()">
+      <mat-card-header>
+        <mat-card-title>
+          New Thread
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-icon class="big-icon">add</mat-icon>
+      </mat-card-content>
     </mat-card>
   </div>
-<div fxFlex *ngIf='editing !== "relationships"'>
-      <mat-card class="add-relationship-card">
 
-
-        <button mat-icon-button color="primary" *ngIf="editing != 'relationships'" (click)="editing = 'relationships'">
-          <mat-icon>add</mat-icon>
-        </button>
-        
-            
-      </mat-card>
-    </div>
-  </div>
+</div>

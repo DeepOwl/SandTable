@@ -53,7 +53,7 @@ export class RelationshipComponent implements OnInit {
   }
 
   editRelationship(){
-    const dialogRef = this.dialog.open(DialogOverviewRelationshipDialog, {
+    const dialogRef = this.dialog.open(EditRelationshipDialog, {
       width: '400px;',
       data:{srcName:this.srcEntity.name, destName:this.destEntity.name, relationship:this.relationship.relationship}
     });
@@ -77,7 +77,7 @@ export class RelationshipComponent implements OnInit {
 
 
 @Component({
-  selector: 'dialog-overview-relationship-dialog',
+  selector: 'edit-relationship-dialog',
   template: `
   <h1 mat-dialog-title> Edit relationship</h1>
   <div mat-dialog-content>
@@ -94,9 +94,9 @@ export class RelationshipComponent implements OnInit {
   </div>
   `
 })
-export class DialogOverviewRelationshipDialog {
+export class EditRelationshipDialog {
   constructor(
-    public dialogRef: MatDialogRef<DialogOverviewRelationshipDialog>,
+    public dialogRef: MatDialogRef<EditRelationshipDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
     swapped = false;
     onSwapClick():void {
