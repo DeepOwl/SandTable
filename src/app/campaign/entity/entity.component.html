@@ -73,7 +73,7 @@
               <mat-icon matChipRemove *ngIf="chipsRemovable">cancel</mat-icon>
             </mat-chip>
             <input #tags [matChipInputFor]="tagList" placeholder="New tag..." [matChipInputAddOnBlur]="true"
-              (matChipInputTokenEnd)="addTag($event)" (blur)="editing = 'none'">
+              (matChipInputTokenEnd)="addTag($event)">
             <button mat-icon-button (click)="editing = 'none'">
               <mat-icon>cancel</mat-icon>
             </button>
